@@ -1,0 +1,773 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml">
+
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Invoke-RestMethodWithBearerAuth</command:name>
+<command:verb>Invoke</command:verb>
+<command:noun>RestMethodWithBearerAuth</command:noun>
+<maml:description><maml:para>Sends an authenticated HTTPS request to a RESTful web service.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>The Invoke-RestMethodWithBearerAuth cmdlet sends HTTP and HTTPS requests to Representational State Transfer (REST) web services that returns richly structured data.
+</maml:para>
+<maml:para>Windows PowerShell formats the response based to the data type. For an RSS or ATOM feed, Windows PowerShell returns the Item or Entry XML nodes. For JavaScript Object Notation (JSON) or XML, Windows PowerShell converts (or deserializes) the content into objects.
+</maml:para>
+<maml:para>This cmdlet was introduced in Windows PowerShell 3.0.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Invoke-RestMethodWithBearerAuth</maml:name>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ClientApplication</maml:name>
+<maml:Description><maml:para>Specifies the client application or client application options to use for authentication.
+</maml:para>
+<maml:para>This parameter is required.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+<dev:type><maml:name>Object</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Scopes</maml:name>
+<maml:Description><maml:para>Specifies the scopes to request when getting an access token.
+</maml:para>
+<maml:para>This parameter is optional.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none"><maml:name>Uri</maml:name>
+<maml:Description><maml:para>Specifies the Uniform Resource Identifier (URI) of the Internet resource to which the web request is sent. This parameter supports HTTP, HTTPS, FTP, and FILE values.
+</maml:para>
+<maml:para>This parameter is required. The parameter name ( Uri ) is optional.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+<dev:type><maml:name>Uri</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>Body</maml:name>
+<maml:Description><maml:para>Specifies the body of the request. The body is the content of the request that follows the headers. You can also pipe a body value to Invoke-RestMethodWithBearerAuth .
+</maml:para>
+<maml:para>The Body parameter can be used to specify a list of query parameters or specify the content of the response.
+</maml:para>
+<maml:para>When the input is a GET request, and the body is an IDictionary (typically, a hash table), the body is added to the URI as query parameters. For other request types (such as POST), the body is set as the value of the request body in the standard name=value format.
+</maml:para>
+<maml:para>When the body is a form, or it is the output of another Invoke-WebRequest call, Windows PowerShell sets the request content to the form fields.
+</maml:para>
+<maml:para>For example:
+</maml:para>
+<maml:para>`$R = Invoke-WebRequest http://website.com/login.aspx` `$R.Forms[0].Name = "MyName"` `$R.Forms[0].Password = "MyPassword"` `Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R`
+</maml:para>
+<maml:para>- or -
+</maml:para>
+<maml:para>`Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R.Forms[0]`
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+<dev:type><maml:name>Object</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Certificate</maml:name>
+<maml:Description><maml:para>Specifies the client certificate that is used for a secure web request. Enter a variable that contains a certificate or a command or expression that gets the certificate.
+</maml:para>
+<maml:para>To find a certificate, use Get-PfxCertificate or use the Get-ChildItem cmdlet in the Certificate (Cert:) drive. If the certificate is not valid or does not have sufficient authority, the command fails.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">X509Certificate</command:parameterValue>
+<dev:type><maml:name>X509Certificate</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>CertificateThumbprint</maml:name>
+<maml:Description><maml:para>Specifies the digital public key certificate (X509) of a user account that has permission to send the request. Enter the certificate thumbprint of the certificate.
+</maml:para>
+<maml:para>Certificates are used in client certificate-based authentication. They can be mapped only to local user accounts; they do not work with domain accounts.
+</maml:para>
+<maml:para>To get a certificate thumbprint, use the Get-Item or Get-ChildItem command in the Windows PowerShell Cert: drive.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ContentType</maml:name>
+<maml:Description><maml:para>Specifies the content type of the web request.
+</maml:para>
+<maml:para>If this parameter is omitted and the request method is POST, Invoke-RestMethodWithBearerAuth sets the content type to application/x-www-form-urlencoded. Otherwise, the content type is not specified in the call.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Credential</maml:name>
+<maml:Description><maml:para>Specifies a user account that has permission to send the request. The default is the current user.
+</maml:para>
+<maml:para>Type a user name, such as User01 or Domain01\User01, or enter a PSCredential object, such as one generated by the Get-Credential cmdlet.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+<dev:type><maml:name>PSCredential</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>DisableKeepAlive</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet sets the KeepAlive value in the HTTP header to False. By default, KeepAlive is True. KeepAlive establishes a persistent connection to the server to facilitate subsequent requests.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Headers</maml:name>
+<maml:Description><maml:para>Specifies the headers of the web request. Enter a hash table or dictionary.
+</maml:para>
+<maml:para>To set UserAgent headers, use the UserAgent parameter. You cannot use this parameter to specify UserAgent or cookie headers.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+<dev:type><maml:name>IDictionary</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>InFile</maml:name>
+<maml:Description><maml:para>Specifies the file for which this cmdlet gets the content of the web request.
+</maml:para>
+<maml:para>Enter a path and file name. If you omit the path, the default is the current location.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>MaximumRedirection</maml:name>
+<maml:Description><maml:para>Specifies how many times Windows PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. The default value is 5. A value of 0 (zero) prevents all redirection.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+<dev:type><maml:name>Int32</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Method</maml:name>
+<maml:Description><maml:para>Specifies the method used for the web request. The acceptable values for this parameter are:
+</maml:para>
+<maml:para>- Default
+</maml:para>
+<maml:para>- Delete
+</maml:para>
+<maml:para>- Get
+</maml:para>
+<maml:para>- Head
+</maml:para>
+<maml:para>- Merge
+</maml:para>
+<maml:para>- Options
+</maml:para>
+<maml:para>- Patch
+</maml:para>
+<maml:para>- Post
+</maml:para>
+<maml:para>- Put
+</maml:para>
+<maml:para>- Trace
+</maml:para>
+</maml:Description>
+<command:parameterValueGroup><command:parameterValue required="false" variableLength="false">Default</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Get</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Head</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Post</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Put</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Delete</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Trace</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Options</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Merge</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">Patch</command:parameterValue>
+</command:parameterValueGroup>
+<command:parameterValue required="true" variableLength="false">WebRequestMethod</command:parameterValue>
+<dev:type><maml:name>WebRequestMethod</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>OutFile</maml:name>
+<maml:Description><maml:para>Specifies the output file that this cmdlet saves the response body. Enter a path and file name. If you omit the path, the default is the current location.
+</maml:para>
+<maml:para>By default, Invoke-RestMethodWithBearerAuth returns the results to the pipeline. To send the results to a file and to the pipeline, use the Passthru parameter.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>PassThru</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet returns the results, in addition to writing them to a file. This parameter is valid only when the OutFile parameter is also used in the command.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Proxy</maml:name>
+<maml:Description><maml:para>Specifies that the cmdlet uses a proxy server for the request, rather than connecting directly to the Internet resource. Enter the URI of a network proxy server.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+<dev:type><maml:name>Uri</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ProxyCredential</maml:name>
+<maml:Description><maml:para>Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
+</maml:para>
+<maml:para>Type a user name, such as "User01" or "Domain01\User01", or enter a PSCredential object, such as one generated by the Get-Credential cmdlet.
+</maml:para>
+<maml:para>This parameter is valid only when the Proxy parameter is also used in the command. You cannot use the ProxyCredential and ProxyUseDefaultCredentials parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+<dev:type><maml:name>PSCredential</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ProxyUseDefaultCredentials</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses the credentials of the current user to access the proxy server that is specified by the Proxy parameter.
+</maml:para>
+<maml:para>This parameter is valid only when the Proxy parameter is also used in the command. You cannot use the ProxyCredential and ProxyUseDefaultCredentials parameters in the same command.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SV"><maml:name>SessionVariable</maml:name>
+<maml:Description><maml:para>Specifies a variable for which this cmdlet creates a web request session and saves it in the value. Enter a variable name without the dollar sign ($) symbol.
+</maml:para>
+<maml:para>When you specify a session variable, Invoke-RestMethodWithBearerAuth creates a web request session object and assigns it to a variable with the specified name in your Windows PowerShell session. You can use the variable in your session as soon as the command completes.
+</maml:para>
+<maml:para>Unlike a remote session, the web request session is not a persistent connection. It is an object that contains information about the connection and the request, including cookies, credentials, the maximum redirection value, and the user agent string. You can use it to share state and data among web requests.
+</maml:para>
+<maml:para>To use the web request session in subsequent web requests, specify the session variable in the value of the WebSession parameter. Windows PowerShell uses the data in the web request session object when establishing the new connection. To override a value in the web request session, use a cmdlet parameter, such as UserAgent or Credential . Parameter values take precedence over values in the web request session.
+</maml:para>
+<maml:para>You cannot use the SessionVariable and WebSession parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>TimeoutSec</maml:name>
+<maml:Description><maml:para>Specifies how long the request can be pending before it times out. Enter a value in seconds. The default value, 0, specifies an indefinite time-out.
+</maml:para>
+<maml:para>A Domain Name System (DNS) query can take up to 15 seconds to return or time out. If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before a WebException is thrown, and your request times out.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+<dev:type><maml:name>Int32</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>TransferEncoding</maml:name>
+<maml:Description><maml:para>Specifies a value for the transfer-encoding HTTP response header. The acceptable values for this parameter are:
+</maml:para>
+<maml:para>- Chunked
+</maml:para>
+<maml:para>- Compress
+</maml:para>
+<maml:para>- Deflate
+</maml:para>
+<maml:para>- GZip
+</maml:para>
+<maml:para>- Identity
+</maml:para>
+</maml:Description>
+<command:parameterValueGroup><command:parameterValue required="false" variableLength="false">chunked</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">compress</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">deflate</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">gzip</command:parameterValue>
+<command:parameterValue required="false" variableLength="false">identity</command:parameterValue>
+</command:parameterValueGroup>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UseBasicParsing</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses basic parsing.
+</maml:para>
+<maml:para>The Body parameter can be used to specify a list of query parameters or specify the content of the response.
+</maml:para>
+<maml:para>When the input is a GET request, and the body is an IDictionary (typically, a hash table), the body is added to the URI as query parameters. For other request types (such as POST), the body is set as the value of the request body in the standard name=value format.
+</maml:para>
+<maml:para>When the body is a form, or it is the output of another Invoke-WebRequest call, Windows PowerShell sets the request content to the form fields.
+</maml:para>
+<maml:para>For example:
+</maml:para>
+<maml:para>`$R = Invoke-WebRequest http://website.com/login.aspx` `$R.Forms[0].Name = "MyName"` `$R.Forms[0].Password = "MyPassword"` `Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R`
+</maml:para>
+<maml:para>- or -
+</maml:para>
+<maml:para>`Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R.Forms[0]`
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UseDefaultCredentials</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses the credentials of the current user to send the web request.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UserAgent</maml:name>
+<maml:Description><maml:para>Specifies a user agent string for the web request.
+</maml:para>
+<maml:para>The default user agent is similar to Mozilla/5.0 (Windows NT; Windows NT 6.1; en-US) WindowsPowerShell/3.0 with slight variations for each operating system and platform.
+</maml:para>
+<maml:para>To test a website with the standard user agent string that is used by most Internet browsers, use the properties of the PSUserAgenthttp://msdn.microsoft.com/en-us/library/windows/desktop/hh484857(v=vs.85).aspx class, such as Chrome, FireFox, InternetExplorer, Opera, and Safari.
+</maml:para>
+<maml:para>For example, the following command uses the user agent string for Internet.
+</maml:para>
+<maml:para>`Invoke-WebRequest -Uri http://website.com/ -UserAgent ([Microsoft.PowerShell.Commands.PSUserAgent]::InternetExplorer)`
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>WebSession</maml:name>
+<maml:Description><maml:para>Specifies a web request session. Enter the variable name, including the dollar sign ($).
+</maml:para>
+<maml:para>To override a value in the web request session, use a cmdlet parameter, such as UserAgent or Credential . Parameter values take precedence over values in the web request session.
+</maml:para>
+<maml:para>Unlike a remote session, the web request session is not a persistent connection. It is an object that contains information about the connection and the request, including cookies, credentials, the maximum redirection value, and the user agent string. You can use it to share state and data among web requests.
+</maml:para>
+<maml:para>To create a web request session, enter a variable name (without a dollar sign) in the value of the SessionVariable parameter of an Invoke-RestMethodWithBearerAuth command. Invoke-RestMethodWithBearerAuth creates the session and saves it in the variable. In subsequent commands, use the variable as the value of the WebSession parameter.
+</maml:para>
+<maml:para>You cannot use the SessionVariable and WebSession parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">WebRequestSession</command:parameterValue>
+<dev:type><maml:name>WebRequestSession</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ClientApplication</maml:name>
+<maml:Description><maml:para>Specifies the client application or client application options to use for authentication.
+</maml:para>
+<maml:para>This parameter is required.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+<dev:type><maml:name>Object</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Scopes</maml:name>
+<maml:Description><maml:para>Specifies the scopes to request when getting an access token.
+</maml:para>
+<maml:para>This parameter is optional.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>Body</maml:name>
+<maml:Description><maml:para>Specifies the body of the request. The body is the content of the request that follows the headers. You can also pipe a body value to Invoke-RestMethodWithBearerAuth .
+</maml:para>
+<maml:para>The Body parameter can be used to specify a list of query parameters or specify the content of the response.
+</maml:para>
+<maml:para>When the input is a GET request, and the body is an IDictionary (typically, a hash table), the body is added to the URI as query parameters. For other request types (such as POST), the body is set as the value of the request body in the standard name=value format.
+</maml:para>
+<maml:para>When the body is a form, or it is the output of another Invoke-WebRequest call, Windows PowerShell sets the request content to the form fields.
+</maml:para>
+<maml:para>For example:
+</maml:para>
+<maml:para>`$R = Invoke-WebRequest http://website.com/login.aspx` `$R.Forms[0].Name = "MyName"` `$R.Forms[0].Password = "MyPassword"` `Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R`
+</maml:para>
+<maml:para>- or -
+</maml:para>
+<maml:para>`Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R.Forms[0]`
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+<dev:type><maml:name>Object</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Certificate</maml:name>
+<maml:Description><maml:para>Specifies the client certificate that is used for a secure web request. Enter a variable that contains a certificate or a command or expression that gets the certificate.
+</maml:para>
+<maml:para>To find a certificate, use Get-PfxCertificate or use the Get-ChildItem cmdlet in the Certificate (Cert:) drive. If the certificate is not valid or does not have sufficient authority, the command fails.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">X509Certificate</command:parameterValue>
+<dev:type><maml:name>X509Certificate</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>CertificateThumbprint</maml:name>
+<maml:Description><maml:para>Specifies the digital public key certificate (X509) of a user account that has permission to send the request. Enter the certificate thumbprint of the certificate.
+</maml:para>
+<maml:para>Certificates are used in client certificate-based authentication. They can be mapped only to local user accounts; they do not work with domain accounts.
+</maml:para>
+<maml:para>To get a certificate thumbprint, use the Get-Item or Get-ChildItem command in the Windows PowerShell Cert: drive.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ContentType</maml:name>
+<maml:Description><maml:para>Specifies the content type of the web request.
+</maml:para>
+<maml:para>If this parameter is omitted and the request method is POST, Invoke-RestMethodWithBearerAuth sets the content type to application/x-www-form-urlencoded. Otherwise, the content type is not specified in the call.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Credential</maml:name>
+<maml:Description><maml:para>Specifies a user account that has permission to send the request. The default is the current user.
+</maml:para>
+<maml:para>Type a user name, such as User01 or Domain01\User01, or enter a PSCredential object, such as one generated by the Get-Credential cmdlet.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+<dev:type><maml:name>PSCredential</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>DisableKeepAlive</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet sets the KeepAlive value in the HTTP header to False. By default, KeepAlive is True. KeepAlive establishes a persistent connection to the server to facilitate subsequent requests.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Headers</maml:name>
+<maml:Description><maml:para>Specifies the headers of the web request. Enter a hash table or dictionary.
+</maml:para>
+<maml:para>To set UserAgent headers, use the UserAgent parameter. You cannot use this parameter to specify UserAgent or cookie headers.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+<dev:type><maml:name>IDictionary</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>InFile</maml:name>
+<maml:Description><maml:para>Specifies the file for which this cmdlet gets the content of the web request.
+</maml:para>
+<maml:para>Enter a path and file name. If you omit the path, the default is the current location.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>MaximumRedirection</maml:name>
+<maml:Description><maml:para>Specifies how many times Windows PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. The default value is 5. A value of 0 (zero) prevents all redirection.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+<dev:type><maml:name>Int32</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Method</maml:name>
+<maml:Description><maml:para>Specifies the method used for the web request. The acceptable values for this parameter are:
+</maml:para>
+<maml:para>- Default
+</maml:para>
+<maml:para>- Delete
+</maml:para>
+<maml:para>- Get
+</maml:para>
+<maml:para>- Head
+</maml:para>
+<maml:para>- Merge
+</maml:para>
+<maml:para>- Options
+</maml:para>
+<maml:para>- Patch
+</maml:para>
+<maml:para>- Post
+</maml:para>
+<maml:para>- Put
+</maml:para>
+<maml:para>- Trace
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">WebRequestMethod</command:parameterValue>
+<dev:type><maml:name>WebRequestMethod</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>OutFile</maml:name>
+<maml:Description><maml:para>Specifies the output file that this cmdlet saves the response body. Enter a path and file name. If you omit the path, the default is the current location.
+</maml:para>
+<maml:para>By default, Invoke-RestMethodWithBearerAuth returns the results to the pipeline. To send the results to a file and to the pipeline, use the Passthru parameter.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>PassThru</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet returns the results, in addition to writing them to a file. This parameter is valid only when the OutFile parameter is also used in the command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>Proxy</maml:name>
+<maml:Description><maml:para>Specifies that the cmdlet uses a proxy server for the request, rather than connecting directly to the Internet resource. Enter the URI of a network proxy server.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+<dev:type><maml:name>Uri</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ProxyCredential</maml:name>
+<maml:Description><maml:para>Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
+</maml:para>
+<maml:para>Type a user name, such as "User01" or "Domain01\User01", or enter a PSCredential object, such as one generated by the Get-Credential cmdlet.
+</maml:para>
+<maml:para>This parameter is valid only when the Proxy parameter is also used in the command. You cannot use the ProxyCredential and ProxyUseDefaultCredentials parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+<dev:type><maml:name>PSCredential</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>ProxyUseDefaultCredentials</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses the credentials of the current user to access the proxy server that is specified by the Proxy parameter.
+</maml:para>
+<maml:para>This parameter is valid only when the Proxy parameter is also used in the command. You cannot use the ProxyCredential and ProxyUseDefaultCredentials parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SV"><maml:name>SessionVariable</maml:name>
+<maml:Description><maml:para>Specifies a variable for which this cmdlet creates a web request session and saves it in the value. Enter a variable name without the dollar sign ($) symbol.
+</maml:para>
+<maml:para>When you specify a session variable, Invoke-RestMethodWithBearerAuth creates a web request session object and assigns it to a variable with the specified name in your Windows PowerShell session. You can use the variable in your session as soon as the command completes.
+</maml:para>
+<maml:para>Unlike a remote session, the web request session is not a persistent connection. It is an object that contains information about the connection and the request, including cookies, credentials, the maximum redirection value, and the user agent string. You can use it to share state and data among web requests.
+</maml:para>
+<maml:para>To use the web request session in subsequent web requests, specify the session variable in the value of the WebSession parameter. Windows PowerShell uses the data in the web request session object when establishing the new connection. To override a value in the web request session, use a cmdlet parameter, such as UserAgent or Credential . Parameter values take precedence over values in the web request session.
+</maml:para>
+<maml:para>You cannot use the SessionVariable and WebSession parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>TimeoutSec</maml:name>
+<maml:Description><maml:para>Specifies how long the request can be pending before it times out. Enter a value in seconds. The default value, 0, specifies an indefinite time-out.
+</maml:para>
+<maml:para>A Domain Name System (DNS) query can take up to 15 seconds to return or time out. If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before a WebException is thrown, and your request times out.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+<dev:type><maml:name>Int32</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>TransferEncoding</maml:name>
+<maml:Description><maml:para>Specifies a value for the transfer-encoding HTTP response header. The acceptable values for this parameter are:
+</maml:para>
+<maml:para>- Chunked
+</maml:para>
+<maml:para>- Compress
+</maml:para>
+<maml:para>- Deflate
+</maml:para>
+<maml:para>- GZip
+</maml:para>
+<maml:para>- Identity
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none"><maml:name>Uri</maml:name>
+<maml:Description><maml:para>Specifies the Uniform Resource Identifier (URI) of the Internet resource to which the web request is sent. This parameter supports HTTP, HTTPS, FTP, and FILE values.
+</maml:para>
+<maml:para>This parameter is required. The parameter name ( Uri ) is optional.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+<dev:type><maml:name>Uri</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UseBasicParsing</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses basic parsing.
+</maml:para>
+<maml:para>The Body parameter can be used to specify a list of query parameters or specify the content of the response.
+</maml:para>
+<maml:para>When the input is a GET request, and the body is an IDictionary (typically, a hash table), the body is added to the URI as query parameters. For other request types (such as POST), the body is set as the value of the request body in the standard name=value format.
+</maml:para>
+<maml:para>When the body is a form, or it is the output of another Invoke-WebRequest call, Windows PowerShell sets the request content to the form fields.
+</maml:para>
+<maml:para>For example:
+</maml:para>
+<maml:para>`$R = Invoke-WebRequest http://website.com/login.aspx` `$R.Forms[0].Name = "MyName"` `$R.Forms[0].Password = "MyPassword"` `Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R`
+</maml:para>
+<maml:para>- or -
+</maml:para>
+<maml:para>`Invoke-RestMethodWithBearerAuth http://website.com/service.aspx -Body $R.Forms[0]`
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UseDefaultCredentials</maml:name>
+<maml:Description><maml:para>Indicates that the cmdlet uses the credentials of the current user to send the web request.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>UserAgent</maml:name>
+<maml:Description><maml:para>Specifies a user agent string for the web request.
+</maml:para>
+<maml:para>The default user agent is similar to Mozilla/5.0 (Windows NT; Windows NT 6.1; en-US) WindowsPowerShell/3.0 with slight variations for each operating system and platform.
+</maml:para>
+<maml:para>To test a website with the standard user agent string that is used by most Internet browsers, use the properties of the PSUserAgenthttp://msdn.microsoft.com/en-us/library/windows/desktop/hh484857(v=vs.85).aspx class, such as Chrome, FireFox, InternetExplorer, Opera, and Safari.
+</maml:para>
+<maml:para>For example, the following command uses the user agent string for Internet.
+</maml:para>
+<maml:para>`Invoke-WebRequest -Uri http://website.com/ -UserAgent ([Microsoft.PowerShell.Commands.PSUserAgent]::InternetExplorer)`
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none"><maml:name>WebSession</maml:name>
+<maml:Description><maml:para>Specifies a web request session. Enter the variable name, including the dollar sign ($).
+</maml:para>
+<maml:para>To override a value in the web request session, use a cmdlet parameter, such as UserAgent or Credential . Parameter values take precedence over values in the web request session.
+</maml:para>
+<maml:para>Unlike a remote session, the web request session is not a persistent connection. It is an object that contains information about the connection and the request, including cookies, credentials, the maximum redirection value, and the user agent string. You can use it to share state and data among web requests.
+</maml:para>
+<maml:para>To create a web request session, enter a variable name (without a dollar sign) in the value of the SessionVariable parameter of an Invoke-RestMethodWithBearerAuth command. Invoke-RestMethodWithBearerAuth creates the session and saves it in the variable. In subsequent commands, use the variable as the value of the WebSession parameter.
+</maml:para>
+<maml:para>You cannot use the SessionVariable and WebSession parameters in the same command.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">WebRequestSession</command:parameterValue>
+<dev:type><maml:name>WebRequestSession</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes><command:inputType><dev:type><maml:name>System.Object</maml:name>
+</dev:type>
+<maml:description><maml:para>You can pipe the body of a web request to Invoke-Rest-Method .
+</maml:para>
+</maml:description>
+</command:inputType>
+</command:inputTypes>
+<command:returnValues><command:returnValue><dev:type><maml:name>System.Xml.XmlDocument, Microsoft.PowerShell.Commands.HtmlWebResponseObject, System.String</maml:name>
+</dev:type>
+<maml:description><maml:para>The output of the cmdlet depends upon the format of the content that is retrieved.
+</maml:para>
+</maml:description>
+</command:returnValue>
+<command:returnValue><dev:type><maml:name>PSObject</maml:name>
+</dev:type>
+<maml:description><maml:para>If the request returns JSON strings, Invoke-RestMethodWithBearerAuth returns a PSObject that represents the strings.
+</maml:para>
+</maml:description>
+</command:returnValue>
+</command:returnValues>
+<maml:alertSet><maml:alert><maml:para>
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>Example 1: Get user from Microsoft Graph</maml:title>
+<dev:code>PS C:\&gt;$ApplicationOptions = New-Object Microsoft.Identity.Client.PublicClientApplicationOptions -Property @{
+    TenantId = 00000000-0000-0000-0000-000000000000
+    ClientId = 00000000-0000-0000-0000-000000000000
+}
+PS C:\&gt;Invoke-RestMethodWithBearerAuth -Scopes 'https://graph.microsoft.com/User.Read' -Method Get -Uri 'https://graph.microsoft.com/v1.0/me' -ClientApplication $ApplicationOptions -Verbose
+</dev:code>
+<dev:remarks><maml:para>This command uses the Invoke-RestMethodWithBearerAuth cmdlet to get information about the user using Microsoft Graph.
+</maml:para>
+</dev:remarks>
+</command:example>
+<command:example><maml:title>Example 2: Perform a PATCH request</maml:title>
+<dev:code>PS C:\&gt;$ApplicationOptions = New-Object Microsoft.Identity.Client.ConfidentialClientApplicationOptions -Property @{
+    TenantId = 00000000-0000-0000-0000-000000000000
+    ClientId = 00000000-0000-0000-0000-000000000000
+    ClientSecret = 'SuperSecretString'
+}
+Invoke-RestMethodAuthenticated -Scopes 'https://graph.microsoft.com/User.ReadWrite.All' -Method Patch -Uri 'https://graph.microsoft.com/v1.0/users/00000000-0000-0000-0000-000000000000' -Verbose -ClientApplication $ApplicationOptions -ContentType 'application/json' -Body (ConvertTo-Json @{
+    displayName = 'New Display Name'
+})
+</dev:code>
+<dev:remarks><maml:para>This command uses the Invoke-RestMethodWithBearerAuth to perform a PATCH request to update the display name on a user in Microsoft Graph.
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>Online Version:</maml:linkText>
+<maml:uri>http://go.microsoft.com/fwlink/?LinkId=821824</maml:uri>
+</maml:navigationLink>
+<maml:navigationLink><maml:linkText>ConvertTo-Json</maml:linkText>
+<maml:uri></maml:uri>
+</maml:navigationLink>
+<maml:navigationLink><maml:linkText>ConvertFrom-Json</maml:linkText>
+<maml:uri></maml:uri>
+</maml:navigationLink>
+<maml:navigationLink><maml:linkText>Invoke-WebRequest</maml:linkText>
+<maml:uri></maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+</helpItems>
