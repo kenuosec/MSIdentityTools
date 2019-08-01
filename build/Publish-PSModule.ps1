@@ -2,7 +2,7 @@ param
 (
 	#
     [parameter(Mandatory=$false)]
-    [string] $ModulePath = ".\release\MSIdentityTools\1.0.0.0",
+    [string] $ModulePath = ".\release\MSIdentityTools\1.0.0.1",
     #
     [parameter(Mandatory=$true)]
     [string] $NuGetApiKey
