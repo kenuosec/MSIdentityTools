@@ -2,11 +2,11 @@
 .SYNOPSIS
    Get User Realm Information for a Microsoft user account.
 .EXAMPLE
-   Get-MicrosoftUserRealm user@domain.com
+   Get-MsftUserRealm user@domain.com
 .EXAMPLE
-   'user1@domainA.com','user2@domainA.com','user@domainB.com' | Get-MicrosoftUserRealm
+   'user1@domainA.com','user2@domainA.com','user@domainB.com' | Get-MsftUserRealm
 #>
-function Get-MicrosoftUserRealm {
+function Get-MsftUserRealm {
     [CmdletBinding()]
     [OutputType([PsCustomObject[]])]
     param
@@ -14,7 +14,7 @@ function Get-MicrosoftUserRealm {
         #
         [Parameter(Mandatory=$true, ValueFromPipeline=$true, Position=1)]
         [string[]] $Users,
-        #
+        # API Version
         [Parameter(Mandatory=$false)]
         [string] $ApiVersion = '2.1'
     )
@@ -28,7 +28,7 @@ function Get-MicrosoftUserRealm {
             }
 
             $Result = Invoke-RestMethod -Method Get -Uri $uriUserRealm.Uri.AbsoluteUri
-            return $Result
+            Write-Output $Result
         }
     }
 }

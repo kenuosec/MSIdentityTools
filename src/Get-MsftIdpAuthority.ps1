@@ -2,19 +2,19 @@
 .SYNOPSIS
     Build Microsoft Identity Authority URI
 .EXAMPLE
-    PS C:\>Get-MicrosoftIdpAuthority
+    PS C:\>Get-MsftIdpAuthority
     Get common Microsoft authority URI endpoint.
 .EXAMPLE
-    PS C:\>Get-MicrosoftIdpAuthority -TenantId consumers
+    PS C:\>Get-MsftIdpAuthority -TenantId consumers
     Get consumer Microsoft authority URI endpoint.
 .EXAMPLE
-    PS C:\>Get-MicrosoftIdpAuthority -TenantId domain.com
+    PS C:\>Get-MsftIdpAuthority -TenantId domain.com
     Get specific Microsoft tenant authority URI endpoint.
 .EXAMPLE
-    PS C:\>Get-MicrosoftIdpAuthority -TenantId 00000000-0000-0000-0000-000000000000 -Policy B2CSignUp
+    PS C:\>Get-MsftIdpAuthority -TenantId 00000000-0000-0000-0000-000000000000 -Policy B2CSignUp
     Get specific Microsoft B2C tenant authority URI endpoint for B2CSignUp policy.
 #>
-function Get-MicrosoftIdpAuthority {
+function Get-MsftIdpAuthority {
     [CmdletBinding()]
     [OutputType([PsCustomObject[]])]
     param (

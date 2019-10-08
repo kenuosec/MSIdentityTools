@@ -26,9 +26,9 @@ function Get-OpenIdProviderConfiguration {
     )
     $uriOpenIdProviderConfiguration = New-Object System.UriBuilder $Issuer.AbsoluteUri
     $uriOpenIdProviderConfiguration.Path += '/.well-known/openid-configuration'
-    $OpenIdProviderConfiguration = Invoke-RestMethod -Uri $uriOpenIdProviderConfiguration.Uri.AbsoluteUri
+    $OpenIdProviderConfiguration = Invoke-RestMethod -Uri $uriOpenIdProviderConfiguration.Uri.AbsoluteUri -ContentType 'application/json'
     if ($Keys) {
-        $OpenIdProviderConfigurationJwks = Invoke-RestMethod -Uri $OpenIdProviderConfiguration.jwks_uri
+        $OpenIdProviderConfigurationJwks = Invoke-RestMethod -Uri $OpenIdProviderConfiguration.jwks_uri -ContentType 'application/json'
         return $OpenIdProviderConfigurationJwks.keys
     }
     else {

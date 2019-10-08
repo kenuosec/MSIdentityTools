@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0.1'
+ModuleVersion = '1.0.0.3'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -73,10 +73,21 @@ NestedModules = @(
     '.\Convert-JsonWebTokenPayload.ps1'
     '.\ConvertFrom-AadcAadConnectorSpaceDn.ps1'
     '.\ConvertFrom-AadcSourceAnchor.ps1'
+    '.\ConvertFrom-Base64String.ps1'
+    '.\ConvertFrom-HexString.ps1'
     '.\ConvertFrom-JsonWebSignature.ps1'
-    '.\Get-MicrosoftIdpAuthority.ps1'
-    '.\Get-MicrosoftUserRealm.ps1'
+    '.\ConvertFrom-QueryString.ps1'
+    '.\ConvertFrom-SecureStringAsPlainText.ps1'
+    '.\ConvertTo-Base64String.ps1'
+    '.\ConvertTo-HexString.ps1'
+    '.\ConvertTo-QueryString.ps1'
+    '.\Get-MsftFederationProvider.ps1'
+    '.\Get-MsftIdpAuthority.ps1'
+    '.\Get-MsftTenantDiscoveryInstance.ps1'
+    '.\Get-MsftUserIdPs.ps1'
+    '.\Get-MsftUserRealm.ps1'
     '.\Get-OpenIdProviderConfiguration.ps1'
+    '.\Get-SamlFederationMetadata.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
     '.\New-AzureAdClientSecret.ps1'
     '.\New-AzureAdUserPassword.ps1'
@@ -88,9 +99,13 @@ FunctionsToExport = @(
     'ConvertFrom-AadcAadConnectorSpaceDn'
     'ConvertFrom-AadcSourceAnchor'
     'ConvertFrom-JsonWebSignature'
-    'Get-MicrosoftIdpAuthority'
-    'Get-MicrosoftUserRealm'
+    #'Get-MsftFederationProvider'
+    'Get-MsftIdpAuthority'
+    #'Get-MsftTenantDiscoveryInstance'
+    #'Get-MsftUserIdPs'
+    'Get-MsftUserRealm'
     'Get-OpenIdProviderConfiguration'
+    'Get-SamlFederationMetadata'
     'Invoke-RestMethodWithBearerAuth'
     'New-AzureAdClientSecret'
     'New-AzureAdUserPassword'
@@ -105,6 +120,7 @@ VariablesToExport = @()
 # Aliases to export from this module
 AliasesToExport = @(
     'ConvertFrom-AzureAdImmutableId'
+    'Get-WsFedFederationMetadata'
 )
 
 # DSC resources to export from this module
