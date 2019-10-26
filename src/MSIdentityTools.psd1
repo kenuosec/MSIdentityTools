@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0.3'
+ModuleVersion = '1.0.0.4'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -50,7 +50,7 @@ DotNetFrameworkVersion = '4.5'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(
-    @{ ModuleName='MSAL.PS'; Guid='c765c957-c730-4520-9c36-6a522e35d60b'; ModuleVersion='4.2.1.3' }
+    @{ ModuleName='MSAL.PS'; Guid='c765c957-c730-4520-9c36-6a522e35d60b'; ModuleVersion='4.5.1.1' }
 )
 
 # Assemblies that must be loaded prior to importing this module
@@ -82,6 +82,7 @@ NestedModules = @(
     '.\ConvertTo-HexString.ps1'
     '.\ConvertTo-QueryString.ps1'
     '.\Get-MsftFederationProvider.ps1'
+    '.\Get-MsftIdentityAssociation.ps1'
     '.\Get-MsftIdpAuthority.ps1'
     '.\Get-MsftTenantDiscoveryInstance.ps1'
     '.\Get-MsftUserIdPs.ps1'
@@ -100,6 +101,7 @@ FunctionsToExport = @(
     'ConvertFrom-AadcSourceAnchor'
     'ConvertFrom-JsonWebSignature'
     #'Get-MsftFederationProvider'
+    'Get-MsftIdentityAssociation'
     'Get-MsftIdpAuthority'
     #'Get-MsftTenantDiscoveryInstance'
     #'Get-MsftUserIdPs'

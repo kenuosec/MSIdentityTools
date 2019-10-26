@@ -1,6 +1,7 @@
 # .ExternalHelp MSIdentityTools-Help.xml
 function Invoke-RestMethodWithBearerAuth {
     [CmdletBinding(HelpUri='https://go.microsoft.com/fwlink/?LinkID=217034')]
+    [Alias('Invoke-RestMethodWithMsal')]
     param(
 
         [parameter(Mandatory=$true)]
