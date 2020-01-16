@@ -29,20 +29,25 @@ function Get-SamlFederationMetadata {
     ## Remove Microsoft v2.0 endpoint because it is only for OAuth2
     if ($Issuer.Authority -eq 'login.microsoftonline.com') { $Issuer = $Issuer.AbsoluteUri -replace '[/\\]v2.0[/\\]?$','' }
 
+    [uri]$Issuer = "https://login.microsoftonline.com/cc7d0b33-84c6-4368-a879-2e47139b7b1f/federationmetadata/2007-06/federationmetadata.xml?appid=24b523ac-d335-4855-a5c4-e35a1eb78413"
     ## Build common federation metadata URI
     $uriFederationMetadata = New-Object System.UriBuilder $Issuer.AbsoluteUri
-    if (!$uriFederationMetadata.Path.EndsWith('/FederationMetadata/2007-06/FederationMetadata.xml')) { $uriFederationMetadata.Path += '/FederationMetadata/2007-06/FederationMetadata.xml' }
+    if (!$uriFederationMetadata.Path.EndsWith('/FederationMetadata/2007-06/FederationMetadata.xml',$true,$null)) { $uriFederationMetadata.Path += '/FederationMetadata/2007-06/FederationMetadata.xml' }
     if ($AppId) { $uriFederationMetadata.Query = ConvertTo-QueryString @{
             AppId = $AppId
         }
     }
 
     ## Download and parse federation metadata
-    $FederationMetadata = Invoke-RestMethod -Uri $uriFederationMetadata.Uri.AbsoluteUri -ContentType 'application/samlmetadata+xml'
+    $FederationMetadata = Invoke-RestMethod -Uri $uriFederationMetadata.Uri.AbsoluteUri -ErrorAction Stop  # Should return ContentType 'application/samlmetadata+xml'
     if ($FederationMetadata -is [string]) {
-        ## Remove non-xml leading characters
-        #[xml] $xmlFederationMetadata = $FederationMetadata.Trim('﻿')
-        [xml] $xmlFederationMetadata = $FederationMetadata -replace '^[^<]*',''
+        try {
+            [xml] $xmlFederationMetadata = $FederationMetadata -replace '^[^<]*',''
+        }
+        catch { throw }
+    }
+    else {
+        [xml] $xmlFederationMetadata = $FederationMetadata
     }
 
     return $xmlFederationMetadata.GetElementsByTagName('EntityDescriptor')

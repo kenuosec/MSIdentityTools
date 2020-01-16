@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0.4'
+ModuleVersion = '1.0.0.5'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -25,7 +25,7 @@ Author = 'Jason Thompson'
 CompanyName = 'Microsoft Corporation'
 
 # Copyright statement for this module
-Copyright = '(c) 2019 Microsoft Corporation. All rights reserved.'
+Copyright = '(c) 2020 Jason Thompson. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Tools for working with Microsoft Identity products.'
@@ -40,7 +40,7 @@ PowerShellVersion = '5.1'
 # PowerShellHostVersion = ''
 
 # Minimum version of Microsoft .NET Framework required by this module
-DotNetFrameworkVersion = '4.5'
+# DotNetFrameworkVersion = '4.5'
 
 # Minimum version of the common language runtime (CLR) required by this module
 #CLRVersion = ''
@@ -54,13 +54,10 @@ RequiredModules = @(
 )
 
 # Assemblies that must be loaded prior to importing this module
-#RequiredAssemblies =
-               #'..\build\packages\Microsoft.Identity.Client.4.1.0\lib\netcoreapp2.1\Microsoft.Identity.Client.dll'
+# RequiredAssemblies = @()
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
-#ScriptsToProcess = @(
-#   '.\MSIdentityTools.ps1'
-#)
+# ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
 # TypesToProcess = @()
@@ -70,47 +67,68 @@ RequiredModules = @(
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @(
+    '.\Add-AzureAdClientCertificate.ps1'
+    '.\Add-AzureAdClientSecret.ps1'
+    '.\Confirm-JsonWebSignature.ps1'
+    '.\Confirm-JsonWebTokenSignature.ps1'
     '.\Convert-JsonWebTokenPayload.ps1'
     '.\ConvertFrom-AadcAadConnectorSpaceDn.ps1'
     '.\ConvertFrom-AadcSourceAnchor.ps1'
     '.\ConvertFrom-Base64String.ps1'
     '.\ConvertFrom-HexString.ps1'
     '.\ConvertFrom-JsonWebSignature.ps1'
-    '.\ConvertFrom-QueryString.ps1'
     '.\ConvertFrom-SecureStringAsPlainText.ps1'
     '.\ConvertTo-Base64String.ps1'
-    '.\ConvertTo-HexString.ps1'
+    '.\ConvertTo-PsParameterString.ps1'
+    '.\ConvertTo-PsString.ps1'
     '.\ConvertTo-QueryString.ps1'
+    '.\Get-AzureIpRange.ps1'
     '.\Get-MsftFederationProvider.ps1'
     '.\Get-MsftIdentityAssociation.ps1'
     '.\Get-MsftIdpAuthority.ps1'
     '.\Get-MsftTenantDiscoveryInstance.ps1'
     '.\Get-MsftUserIdPs.ps1'
     '.\Get-MsftUserRealm.ps1'
+    '.\Get-O365Endpoints.ps1'
     '.\Get-OpenIdProviderConfiguration.ps1'
     '.\Get-SamlFederationMetadata.ps1'
+    '.\Initialize-AzureAdModule.ps1'
+    '.\Invoke-CommandAsSystem.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
+    '.\New-AzureAdClientCertificate.ps1'
     '.\New-AzureAdClientSecret.ps1'
+    '.\New-AzureAdPowerShellClient.ps1'
     '.\New-AzureAdUserPassword.ps1'
+    '.\Test-AzureAdDeviceRegConnectivity.ps1'
+    '.\Write-HostPrompt.ps1'
 )
 
 # Functions to export from this module
 FunctionsToExport = @(
+    'Add-AzureAdClientCertificate'
+    'Add-AzureAdClientSecret'
+    'Confirm-JsonWebSignature'
+    'Confirm-JsonWebTokenSignature'
     'Convert-JsonWebTokenPayload'
     'ConvertFrom-AadcAadConnectorSpaceDn'
     'ConvertFrom-AadcSourceAnchor'
     'ConvertFrom-JsonWebSignature'
+    'Get-AzureIpRange'
     #'Get-MsftFederationProvider'
     'Get-MsftIdentityAssociation'
     'Get-MsftIdpAuthority'
     #'Get-MsftTenantDiscoveryInstance'
     #'Get-MsftUserIdPs'
     'Get-MsftUserRealm'
+    'Get-O365Endpoints'
     'Get-OpenIdProviderConfiguration'
     'Get-SamlFederationMetadata'
     'Invoke-RestMethodWithBearerAuth'
+    'New-AzureAdClientCertificate'
     'New-AzureAdClientSecret'
+    'New-AzureAdPowerShellClient'
     'New-AzureAdUserPassword'
+    'Test-AzureAdDeviceRegConnectivity'
 )
 
 # Cmdlets to export from this module

@@ -92,6 +92,64 @@ function Invoke-RestMethodWithBearerAuth {
 
     begin
     {
+        ## Cmdlet Extention
+        if ($ClientApplication -is [Microsoft.Identity.Client.IClientApplicationBase])
+        {
+            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication
+        }
+        elseif ($ClientApplication -is [Microsoft.Identity.Client.ApplicationOptions])
+        {
+            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication | Get-MsalClientApplication -CreateIfMissing
+        }
+        elseif ($ClientApplication -is [hashtable])
+        {
+            if ($ClientApplication.ContainsKey('ClientSecret') -or $ClientApplication.ContainsKey('ClientCertificate')) {
+                [Microsoft.Identity.Client.ConfidentialClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.ConfidentialClientApplicationOptions -Property $ClientApplication
+            }
+            else {
+                [Microsoft.Identity.Client.PublicClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.PublicClientApplicationOptions -Property $ClientApplication
+            }
+            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ApplicationOptions | Get-MsalClientApplication -CreateIfMissing
+        }
+        elseif ($ClientApplication -is [string])
+        {
+            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = Get-MsalClientApplication -ClientId $ClientApplication -CreateIfMissing
+        }
+        else {
+            # Otherwise, write a terminating error message indicating that input object type is not supported.
+            $errorMessage = "Cannot parse ClientApplication type [{0}]." -f $InputObject.GetType()
+            Write-Error -Message $errorMessage -Category ([System.Management.Automation.ErrorCategory]::ParserError) -ErrorId "InvokeRestMethodFailureTypeNotSupported"
+        }
+
+        ## Get Token
+        if ($PSBoundParameters.ContainsKey('Scopes'))
+        {
+            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken -Scopes $PSBoundParameters['Scopes']
+        }
+        else {
+            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken
+        }
+
+        ## Inject bearer token
+        if ($PSBoundParameters.ContainsKey('Headers')) {
+            [System.Collections.IDictionary] $Headers = $PSBoundParameters['Headers']
+        }
+        else {
+            [System.Collections.IDictionary] $Headers = @{}
+            $PSBoundParameters.Add('Headers', $Headers)
+        }
+        if ($Headers.ContainsKey('Authorization')) {
+            $Headers['Authorization'] = $MsalToken.CreateAuthorizationHeader()
+        }
+        else {
+            $Headers.Add('Authorization', $MsalToken.CreateAuthorizationHeader())
+        }
+
+        ## Remove extra parameters
+        if ($PSBoundParameters.ContainsKey('ClientApplication')) { [void] $PSBoundParameters.Remove('ClientApplication') }
+        if ($PSBoundParameters.ContainsKey('Scopes')) { [void] $PSBoundParameters.Remove('Scopes') }
+
+        ## Resume Command
         try {
             $outBuffer = $null
             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
@@ -99,65 +157,6 @@ function Invoke-RestMethodWithBearerAuth {
                 $PSBoundParameters['OutBuffer'] = 1
             }
             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Invoke-RestMethod', [System.Management.Automation.CommandTypes]::Cmdlet)
-
-            ## Cmdlet Extention
-            if ($ClientApplication -is [Microsoft.Identity.Client.IClientApplicationBase])
-            {
-                [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication
-            }
-            elseif ($ClientApplication -is [Microsoft.Identity.Client.ApplicationOptions])
-            {
-                [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication | Get-MsalClientApplication -CreateIfMissing
-            }
-            elseif ($ClientApplication -is [hashtable])
-            {
-                if ($ClientApplication.ContainsKey('ClientSecret') -or $ClientApplication.ContainsKey('ClientCertificate')) {
-                    [Microsoft.Identity.Client.ConfidentialClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.ConfidentialClientApplicationOptions -Property $ClientApplication
-                }
-                else {
-                    [Microsoft.Identity.Client.PublicClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.PublicClientApplicationOptions -Property $ClientApplication
-                }
-                [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ApplicationOptions | Get-MsalClientApplication -CreateIfMissing
-            }
-            elseif ($ClientApplication -is [string])
-            {
-                [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = Get-MsalClientApplication -ClientId $ClientApplication -CreateIfMissing
-            }
-            else {
-                # Otherwise, write a terminating error message indicating that input object type is not supported.
-                $errorMessage = "Cannot parse ClientApplication type [{0}]." -f $InputObject.GetType()
-                Write-Error -Message $errorMessage -Category ([System.Management.Automation.ErrorCategory]::ParserError) -ErrorId "InvokeRestMethodFailureTypeNotSupported"
-            }
-
-            ## Get Token
-            if ($PSBoundParameters.ContainsKey('Scopes'))
-            {
-                [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken -Scopes $PSBoundParameters['Scopes']
-            }
-            else {
-                [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken
-            }
-
-            ## Inject bearer token
-            if ($PSBoundParameters.ContainsKey('Headers')) {
-                [System.Collections.IDictionary] $Headers = $PSBoundParameters['Headers']
-            }
-            else {
-                [System.Collections.IDictionary] $Headers = @{}
-                $PSBoundParameters.Add('Headers', $Headers)
-            }
-            if ($Headers.ContainsKey('Authorization')) {
-                $Headers['Authorization'] = $MsalToken.CreateAuthorizationHeader()
-            }
-            else {
-                $Headers.Add('Authorization', $MsalToken.CreateAuthorizationHeader())
-            }
-
-            ## Remove extra parameters
-            if ($PSBoundParameters.ContainsKey('ClientApplication')) { [void] $PSBoundParameters.Remove('ClientApplication') }
-            if ($PSBoundParameters.ContainsKey('Scopes')) { [void] $PSBoundParameters.Remove('Scopes') }
-
-            ## Execute Command
             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
             $steppablePipeline.Begin($PSCmdlet)

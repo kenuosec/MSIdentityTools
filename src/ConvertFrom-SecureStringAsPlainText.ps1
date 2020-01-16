@@ -4,7 +4,7 @@
 .DESCRIPTION
 
 .EXAMPLE
-    PS C:\>ConvertFrom-SecureStringAsPlainText (ConvertTo-SecureString 'SuperSecretString' -AsPlainText -Force)
+    PS C:\>ConvertFrom-SecureStringAsPlainText (ConvertTo-SecureString 'SuperSecretString' -AsPlainText -Force) -Force
     Convert plain text to SecureString and then convert it back.
 .INPUTS
     System.Security.SecureString
@@ -15,7 +15,10 @@ function ConvertFrom-SecureStringAsPlainText {
     param (
         # Secure String Value
         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-        [securestring] $SecureString
+        [securestring] $SecureString,
+        # Confirms that you understand the implications of using the AsPlainText parameter and still want to use it.
+        [Parameter(Mandatory=$true, Position=1)]
+        [switch] $Force
     )
 
     try {

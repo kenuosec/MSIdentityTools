@@ -460,7 +460,7 @@ function Add-AzureADApplicationClientSecret ($MsalToken,$ClientId) {
                 $appConfidentialClient.value[0].passwordCredentials | Where-Object displayName -NE 'MSAL.PS'
                 @{
                     endDateTime = (Get-Date).AddMonths(1).ToString('O')
-                    secretText = (ConvertFrom-SecureStringAsPlainText $ClientSecret)
+                    secretText = (ConvertFrom-SecureStringAsPlainText $ClientSecret -Force)
                     displayName = "MSAL.PS"
                 }
             )

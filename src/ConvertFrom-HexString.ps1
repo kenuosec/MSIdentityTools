@@ -4,11 +4,13 @@
 .DESCRIPTION
 
 .EXAMPLE
-
+    PS C:\>ConvertFrom-HexString "57 68 61 74 20 69 73 20 61 20 68 65 78 20 73 74 72 69 6E 67 3F"
+    Convert string to hex byte string seperated by spaces.
+.EXAMPLE
+    PS C:\>"415343494920737472696E6720746F2068657820737472696E67" | ConvertFrom-HexString -Delimiter "" -Encoding Ascii
+    Convert ASCII string to hex byte string with no seperation.
 .INPUTS
-
-.NOTES
-
+    System.String
 #>
 function ConvertFrom-HexString {
     [CmdletBinding()]
@@ -18,14 +20,14 @@ function ConvertFrom-HexString {
         [string[]] $InputObject,
         # Delimiter between Hex pairs
         [Parameter (Mandatory=$false)]
-        [string] $Delimiter = " ",
+        [string] $Delimiter = ' ',
         # Output raw byte array
         [Parameter (Mandatory=$false)]
         [switch] $RawBytes,
         # Encoding to use for text strings
         [Parameter (Mandatory=$false)]
-        [ValidateSet("Ascii", "UTF32", "UTF7", "UTF8", "BigEndianUnicode", "Unicode")]
-        [string] $Encoding = "Default"
+        [ValidateSet('Ascii', 'UTF32', 'UTF7', 'UTF8', 'BigEndianUnicode', 'Unicode')]
+        [string] $Encoding = 'Default'
     )
 
     process

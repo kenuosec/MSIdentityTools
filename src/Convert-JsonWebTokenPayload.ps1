@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-   Extract Json Web Token (JWT) from JWS structure to PowerShell object.
+    Extract Json Web Token (JWT) from JWS structure to PowerShell object.
 .EXAMPLE
-    PS C:\>$MsalToken.IdToken | Convert-JsonWebToken
+    PS C:\>$MsalToken.IdToken | Convert-JsonWebTokenPayload
     Convert OAuth IdToken JWS to PowerShell object.
 .INPUTS
     System.String
@@ -12,10 +12,15 @@ function Convert-JsonWebTokenPayload {
     [OutputType([PSCustomObject])]
     param (
         # JSON Web Signature (JWS)
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
-        [string] $InputObject
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        [string[]] $InputObjects
     )
-    [string] $JwsPayload = $InputObject.Split('.')[1]
-    $JwtDecoded = $JwsPayload | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json
-    return $JwtDecoded
+
+    process {
+        foreach ($InputObject in $InputObjects) {
+            [string] $JwsPayload = $InputObject.Split('.')[1]
+            $JwtDecoded = $JwsPayload | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json
+            Write-Output $JwtDecoded
+        }
+    }
 }

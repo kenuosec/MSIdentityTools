@@ -3,26 +3,26 @@ param
 	# Directory used to base all relative paths
     [parameter(Mandatory=$false)]
     [string] $BaseDirectory = "..\",
-    # 
+    #
     [parameter(Mandatory=$false)]
     [string] $PackagesConfigPath = ".\packages.config",
-    # 
+    #
     [parameter(Mandatory=$false)]
     [string] $NuGetConfigPath,
-    # 
+    #
     [parameter(Mandatory=$false)]
     [string] $OutputDirectory,
-    # 
+    #
     [parameter(Mandatory=$false)]
     [string] $NuGetPath = ".\build",
-    # 
+    #
     [parameter(Mandatory=$false)]
     [uri] $NuGetUri = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe'
 )
 
 ## Initialize
 Remove-Module CommonFunctions -ErrorAction SilentlyContinue
-Import-Module $PSScriptRoot\CommonFunctions.psm1
+Import-Module $PSScriptRoot\CommonFunctions.psm1 -DisableNameChecking
 
 [System.IO.DirectoryInfo] $BaseDirectoryInfo = Get-PathInfo $BaseDirectory -InputPathType Directory -ErrorAction Stop
 [System.IO.FileInfo] $PackagesConfigFileInfo = Get-PathInfo $PackagesConfigPath -DefaultDirectory $BaseDirectoryInfo.FullName -DefaultFilename "packages.config" -ErrorAction Stop
@@ -33,7 +33,7 @@ Import-Module $PSScriptRoot\CommonFunctions.psm1
 
 ## Download NuGet
 if (!$NuGetFileInfo.Exists) {
-    Invoke-WebRequest $NuGetUri.AbsoluteUri -UseBasicParsing -OutFile $itemNuGetPath.FullName
+    Invoke-WebRequest $NuGetUri.AbsoluteUri -UseBasicParsing -OutFile $NuGetFileInfo.FullName
 }
 
 ## Run NuGet

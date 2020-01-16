@@ -12,24 +12,29 @@ function ConvertFrom-JsonWebSignature {
     [OutputType([PSCustomObject])]
     param (
         # JSON Web Signature (JWS)
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
-        [string] $InputObject,
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        [string[]] $InputObjects,
         # Content Type of the Payload
         [Parameter(Mandatory=$false)]
         [ValidateSet('text/plain','application/json','application/octet-stream')]
         [string] $ContentType = 'application/json'
     )
-    [string[]] $JwsComponents = $InputObject.Split('.')
-    switch ($ContentType) {
-        'application/octet-stream' { [byte[]] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url -RawBytes }
-        'text/plain' { [string] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url }
-        'application/json' { [PSCustomObject] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json }
-        Default { [string] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url }
+
+    process {
+        foreach ($InputObject in $InputObjects) {
+            [string[]] $JwsComponents = $InputObject.Split('.')
+            switch ($ContentType) {
+                'application/octet-stream' { [byte[]] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url -RawBytes }
+                'text/plain' { [string] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url }
+                'application/json' { [PSCustomObject] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json }
+                Default { [string] $JwsPayload = $JwsComponents[1] | ConvertFrom-Base64String -Base64Url }
+            }
+            [PSCustomObject] $JwsDecoded = New-Object PSCustomObject -Property @{
+                Header = $JwsComponents[0] | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json
+                Payload = $JwsPayload
+                Signature = $JwsComponents[2] | ConvertFrom-Base64String -Base64Url -RawBytes
+            }
+            Write-Output $JwsDecoded
+        }
     }
-    [PSCustomObject] $JwsDecoded = New-Object PSCustomObject -Property @{
-        Header = $JwsComponents[0] | ConvertFrom-Base64String -Base64Url | ConvertFrom-Json
-        Payload = $JwsPayload
-        Signature = $JwsComponents[2] | ConvertFrom-Base64String -Base64Url -RawBytes
-    }
-    return $JwsDecoded
 }

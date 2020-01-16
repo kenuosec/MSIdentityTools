@@ -1,5 +1,5 @@
 # MSIdentityTools
-This module is intended to support the use of Microsoft Identity products. This project is in no way supported by Microsoft.
+Tools for working with Microsoft Identity products. This project is not supported by Microsoft.
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:

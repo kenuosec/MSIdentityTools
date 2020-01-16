@@ -21,7 +21,7 @@ function ConvertFrom-Base64String {
     param (
         # Value to convert
         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-        [string[]] $InputObject,
+        [string[]] $InputObjects,
         # Use base64url variant
         [Parameter (Mandatory=$false)]
         [switch] $Base64Url,
@@ -30,25 +30,24 @@ function ConvertFrom-Base64String {
         [switch] $RawBytes,
         # Encoding to use for text strings
         [Parameter (Mandatory=$false)]
-        [ValidateSet("Ascii", "UTF32", "UTF7", "UTF8", "BigEndianUnicode", "Unicode")]
-        [string] $Encoding = "Default"
+        [ValidateSet('Ascii', 'UTF32', 'UTF7', 'UTF8', 'BigEndianUnicode', 'Unicode')]
+        [string] $Encoding = 'Default'
     )
 
     process
     {
-        $listBytes = New-Object object[] $InputObject.Count
-        for ($iString = 0; $iString -lt $InputObject.Count; $iString++) {
-            [string] $strBase64 = $InputObject[$iString]
+        foreach ($InputObject in $InputObjects) {
+            [string] $strBase64 = $InputObject
+            if (!$PSBoundParameters.ContainsValue('Base64Url') -and ($strBase64.Contains('-') -or $strBase64.Contains('_'))) { $Base64Url = $true }
             if ($Base64Url) { $strBase64 = $strBase64.Replace('-','+').Replace('_','/').PadRight($strBase64.Length + (4 - $strBase64.Length % 4) % 4, '=') }
             [byte[]] $outBytes = [System.Convert]::FromBase64String($strBase64)
-            if ($RawBytes) { $listBytes[$iString] = $outBytes }
+            if ($RawBytes) {
+                Write-Output $outBytes -NoEnumerate
+            }
             else {
-                $outString = ([Text.Encoding]::$Encoding.GetString($outBytes))
+                [string] $outString = ([Text.Encoding]::$Encoding.GetString($outBytes))
                 Write-Output $outString
             }
-        }
-        if ($RawBytes) {
-            return $listBytes
         }
     }
 }

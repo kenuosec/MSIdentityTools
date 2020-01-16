@@ -52,7 +52,7 @@ if ($MsalToken.AccessToken) {
 (New-Object Microsoft.Identity.Client.ConfidentialClientApplicationOptions -Property @{
     TenantId = [guid]::NewGuid()
     ClientId = [guid]::NewGuid()
-    ClientSecret = (ConvertFrom-SecureStringAsPlainText $ConfidentialClientSecret)
+    ClientSecret = (ConvertFrom-SecureStringAsPlainText $ConfidentialClientSecret -Force)
 } | New-MsalClientApplication -TenantId $TenantId -Verbose).AppConfig
 
 ## Test Confidential Client Secret
