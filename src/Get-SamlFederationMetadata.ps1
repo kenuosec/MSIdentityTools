@@ -39,7 +39,7 @@ function Get-SamlFederationMetadata {
     }
 
     ## Download and parse federation metadata
-    $FederationMetadata = Invoke-RestMethod -Uri $uriFederationMetadata.Uri.AbsoluteUri -ErrorAction Stop  # Should return ContentType 'application/samlmetadata+xml'
+    $FederationMetadata = Invoke-RestMethod -UseBasicParsing -Uri $uriFederationMetadata.Uri.AbsoluteUri -ErrorAction Stop  # Should return ContentType 'application/samlmetadata+xml'
     if ($FederationMetadata -is [string]) {
         try {
             [xml] $xmlFederationMetadata = $FederationMetadata -replace '^[^<]*',''

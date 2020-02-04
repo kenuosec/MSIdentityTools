@@ -26,7 +26,7 @@ function Get-MsftFederationProvider {
                 'domain' = $Domain
             }
 
-            $Result = Invoke-RestMethod -Method Get -Uri $uriFederationProvider.Uri.AbsoluteUri
+            $Result = Invoke-RestMethod -UseBasicParsing -Method Get -Uri $uriFederationProvider.Uri.AbsoluteUri
             Write-Output $Result
         }
     }

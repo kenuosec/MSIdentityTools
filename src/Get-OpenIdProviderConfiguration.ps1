@@ -32,9 +32,9 @@ function Get-OpenIdProviderConfiguration {
     if (!$uriOpenIdProviderConfiguration.Path.EndsWith('/.well-known/openid-configuration')) { $uriOpenIdProviderConfiguration.Path += '/.well-known/openid-configuration' }
 
     ## Download and parse configuration
-    $OpenIdProviderConfiguration = Invoke-RestMethod -Uri $uriOpenIdProviderConfiguration.Uri.AbsoluteUri  # Should return ContentType 'application/json'
+    $OpenIdProviderConfiguration = Invoke-RestMethod -UseBasicParsing -Uri $uriOpenIdProviderConfiguration.Uri.AbsoluteUri  # Should return ContentType 'application/json'
     if ($Keys) {
-        $OpenIdProviderConfigurationJwks = Invoke-RestMethod -Uri $OpenIdProviderConfiguration.jwks_uri  # Should return ContentType 'application/json'
+        $OpenIdProviderConfigurationJwks = Invoke-RestMethod -UseBasicParsing -Uri $OpenIdProviderConfiguration.jwks_uri  # Should return ContentType 'application/json'
         return $OpenIdProviderConfigurationJwks.keys
     }
     else {

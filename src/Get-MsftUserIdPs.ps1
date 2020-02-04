@@ -27,7 +27,7 @@ function Get-MsftUserIdPs {
                 'emailAddress' = $EmailAddress
             }
 
-            $Result = Invoke-RestMethod -Method Get -Uri $uriIdP.Uri.AbsoluteUri
+            $Result = Invoke-RestMethod -UseBasicParsing -Method Get -Uri $uriIdP.Uri.AbsoluteUri
             Write-Output $Result
         }
     }

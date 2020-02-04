@@ -362,7 +362,7 @@ function New-AzureADApplicationPublicClient ($MsalToken) {
         Authorization = $MsalToken.CreateAuthorizationHeader()
     }
 
-    $appPublicClient = Invoke-RestMethod -Method Post -Uri "https://graph.microsoft.com/beta/applications" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json -Depth 4 @{
+    $appPublicClient = Invoke-RestMethod -UseBasicParsing -Method Post -Uri "https://graph.microsoft.com/beta/applications" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json -Depth 4 @{
         displayName = "PublicClient"
         signInAudience = "AzureADMyOrg"
         isFallbackPublicClient = $true
@@ -400,7 +400,7 @@ function New-AzureADApplicationConfidentialClient ($MsalToken) {
         Authorization = $MsalToken.CreateAuthorizationHeader()
     }
 
-    $appConfidentialClient = Invoke-RestMethod -Method Post -Uri "https://graph.microsoft.com/beta/applications" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json -Depth 4 @{
+    $appConfidentialClient = Invoke-RestMethod -UseBasicParsing -Method Post -Uri "https://graph.microsoft.com/beta/applications" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json -Depth 4 @{
         displayName = "ConfidentialClient"
         signInAudience = "AzureADMyOrg"
         isFallbackPublicClient = $false
@@ -452,10 +452,10 @@ function Add-AzureADApplicationClientSecret ($MsalToken,$ClientId) {
         Authorization = $MsalToken.CreateAuthorizationHeader()
     }
 
-    $appConfidentialClient = Invoke-RestMethod -Method Get -Uri "https://graph.microsoft.com/beta/applications?`$filter=appId eq '$ClientId'" -Headers $Headers
+    $appConfidentialClient = Invoke-RestMethod -UseBasicParsing -Method Get -Uri "https://graph.microsoft.com/beta/applications?`$filter=appId eq '$ClientId'" -Headers $Headers
     if ($appConfidentialClient.value.Count) {
         [securestring] $ClientSecret = New-AzureADClientSecret
-        Invoke-RestMethod -Method Patch -Uri "https://graph.microsoft.com/beta/applications/$($appConfidentialClient.value[0].id)" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json @{
+        Invoke-RestMethod -UseBasicParsing -Method Patch -Uri "https://graph.microsoft.com/beta/applications/$($appConfidentialClient.value[0].id)" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json @{
             passwordCredentials = @(
                 $appConfidentialClient.value[0].passwordCredentials | Where-Object displayName -NE 'MSAL.PS'
                 @{
@@ -474,10 +474,10 @@ function Add-AzureADApplicationClientCertificate ($MsalToken,$ClientId) {
         Authorization = $MsalToken.CreateAuthorizationHeader()
     }
 
-    $appConfidentialClient = Invoke-RestMethod -Method Get -Uri "https://graph.microsoft.com/beta/applications?`$filter=appId eq '$ClientId'" -Headers $Headers
+    $appConfidentialClient = Invoke-RestMethod -UseBasicParsing -Method Get -Uri "https://graph.microsoft.com/beta/applications?`$filter=appId eq '$ClientId'" -Headers $Headers
     if ($appConfidentialClient.value.Count) {
         [System.Security.Cryptography.X509Certificates.X509Certificate2] $ClientCertificate = New-SelfSignedCertificate -Subject 'CN=ConfidentialClient' -KeyFriendlyName "Confidential Client" -HashAlgorithm sha256 -KeySpec Signature -KeyLength 2048 -Type Custom -NotBefore (Get-Date) -NotAfter (Get-Date).AddYears(1) -KeyExportPolicy ExportableEncrypted -CertStoreLocation Cert:\CurrentUser\My
-        Invoke-RestMethod -Method Patch -Uri "https://graph.microsoft.com/beta/applications/$($appConfidentialClient.value[0].id)" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json @{
+        Invoke-RestMethod -UseBasicParsing -Method Patch -Uri "https://graph.microsoft.com/beta/applications/$($appConfidentialClient.value[0].id)" -Headers $Headers -ContentType 'application/json' -Body (ConvertTo-Json @{
             keyCredentials = @(
                 $appConfidentialClient.value[0].keyCredentials | Where-Object displayName -NE 'MSAL.PS'
                 @{

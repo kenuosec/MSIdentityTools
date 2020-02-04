@@ -20,6 +20,6 @@ function Get-MsftIdentityAssociation {
     if (!$uriMsftIdentityAssociation.Path.EndsWith('/.well-known/microsoft-identity-association.json')) { $uriMsftIdentityAssociation.Path += '/.well-known/microsoft-identity-association.json' }
 
     ## Download and parse configuration
-    $MsftIdentityAssociation = Invoke-RestMethod -Uri $uriMsftIdentityAssociation.Uri.AbsoluteUri  # Should return ContentType 'application/json'
+    $MsftIdentityAssociation = Invoke-RestMethod -UseBasicParsing -Uri $uriMsftIdentityAssociation.Uri.AbsoluteUri  # Should return ContentType 'application/json'
     return $MsftIdentityAssociation
 }

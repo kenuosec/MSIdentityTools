@@ -51,7 +51,7 @@ function Get-AzureIpRange {
     }
 
     if ($MdcDirectUri) {
-        $AzureIPs = Invoke-RestMethod -Uri $MdcDirectUri -UseBasicParsing -ErrorAction Stop
+        $AzureIPs = Invoke-RestMethod -UseBasicParsing -Uri $MdcDirectUri -ErrorAction Stop
     }
 
     if ($AllServiceTagsAndRegions) {

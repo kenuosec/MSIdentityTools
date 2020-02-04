@@ -27,7 +27,7 @@ function Get-MsftTenantDiscoveryInstance {
                 'authorization_endpoint' = $AuthorizationEndpoint
             }
 
-            $Result = Invoke-RestMethod -Method Get -Uri $uriDiscoverInstance.Uri.AbsoluteUri
+            $Result = Invoke-RestMethod -UseBasicParsing -Method Get -Uri $uriDiscoverInstance.Uri.AbsoluteUri
             Write-Output $Result
         }
     }

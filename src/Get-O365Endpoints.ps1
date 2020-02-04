@@ -45,6 +45,6 @@ function Get-O365Endpoints {
     [System.UriBuilder] $O365EndpointsUri = 'https://endpoints.office.com/endpoints/{0}' -f $Cloud
     $O365EndpointsUri.Query = ConvertTo-QueryString $EndpointsParameters
 
-    $O365Endpoints = Invoke-RestMethod -Uri $O365EndpointsUri.Uri -UseBasicParsing -ErrorAction Stop
+    $O365Endpoints = Invoke-RestMethod -UseBasicParsing -Uri $O365EndpointsUri.Uri -ErrorAction Stop
     return $O365Endpoints
 }

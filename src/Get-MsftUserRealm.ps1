@@ -27,7 +27,7 @@ function Get-MsftUserRealm {
                 'user' = $User
             }
 
-            $Result = Invoke-RestMethod -Method Get -Uri $uriUserRealm.Uri.AbsoluteUri
+            $Result = Invoke-RestMethod -UseBasicParsing -Method Get -Uri $uriUserRealm.Uri.AbsoluteUri
             Write-Output $Result
         }
     }
