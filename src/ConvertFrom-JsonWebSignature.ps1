@@ -9,6 +9,9 @@
 #>
 function ConvertFrom-JsonWebSignature {
     [CmdletBinding()]
+    [Alias('ConvertFrom-Jws')]
+    [Alias('ConvertFrom-JsonWebToken')]
+    [Alias('ConvertFrom-Jwt')]
     [OutputType([PSCustomObject])]
     param (
         # JSON Web Signature (JWS)

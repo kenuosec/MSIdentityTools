@@ -9,6 +9,7 @@
 #>
 function Confirm-JsonWebSignature {
     [CmdletBinding()]
+    [Alias('Confirm-Jws')]
     [OutputType([bool])]
     param (
         # JSON Web Signature (JWS)

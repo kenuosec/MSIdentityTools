@@ -39,15 +39,11 @@ function Add-AzureAdClientCertificate {
 
     begin
     {
-        $AzureADSessionInfo = Initialize-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
+        $PSModule = Install-AzureAdModule -ErrorAction Stop
+        Import-Module -ModuleInfo $PSModule -ErrorAction Stop
+        $AzureADSessionInfo = Connect-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
 
-        $InvokeCommandMessage = @'
-
-{0}
-
-Do you want to invoke the above command(s)?
-'@
-
+        $InvokeCommandMessage = "`r`n{0}`r`n`r`nDo you want to invoke the above command(s)?"
         [System.Management.Automation.Host.ChoiceDescription[]] $ConfirmChoices = @(
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&Yes", "Continue with the operation."
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&No", "Do not proceed with the operation."
@@ -71,7 +67,10 @@ Do you want to invoke the above command(s)?
             $InputParameters = Write-HostPrompt "Input" "Supply values for the following parameters:" -Fields @(
                 New-Object System.Management.Automation.Host.FieldDescription -ArgumentList "CertificatePath"
             )
-            if (!$InputParameters['CertificatePath']) { throw 'No certificate provided.' }
+            if (!$InputParameters['CertificatePath']) {
+                $Exception = New-Object System.Management.Automation.PSArgumentException -ArgumentList 'CertificatePath must not be empty or null.'
+                Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::InvalidArgument) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'AddAzureAdClientCertificateFailureInvalidArgument' -TargetObject $InputParameters['CertificatePath'] -ErrorAction Stop
+            }
             [System.Security.Cryptography.X509Certificates.X509Certificate2] $ClientCertificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList $InputParameters['CertificatePath']
         }
         Write-Output $ClientCertificate
@@ -87,17 +86,25 @@ Do you want to invoke the above command(s)?
         switch ($AzureADObject.ObjectType) {
             'Application' {
                 $Message = $InvokeCommandMessage -f "New-AzureADApplicationKeyCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramKeyCredential -Compact)"
-                $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Certificate to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
                 if ($Result -eq 0) {
                     New-AzureADApplicationKeyCredential -ObjectId $AzureADObject.ObjectId -ErrorAction Stop @paramKeyCredential | Out-Null
                     #Set-AzureADApplication -ObjectId $AzureADObject.ObjectId -PublicClient $false | Out-Null
                 }
+                else {
+                    $Exception = New-Object OperationCanceledException -ArgumentList 'Adding Client Certificate to Application in Azure AD declined by user.'
+                    Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'AddAzureAdClientCertificateUserDeclined'
+                }
             }
             'ServicePrincipal' {
                 $Message = $InvokeCommandMessage -f "New-AzureADServicePrincipalKeyCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramKeyCredential -Compact)"
-                $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Certificate to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
                 if ($Result -eq 0) {
                     New-AzureADServicePrincipalKeyCredential -ObjectId $AzureADObject.ObjectId @paramKeyCredential | Out-Null
+                }
+                else {
+                    $Exception = New-Object OperationCanceledException -ArgumentList 'Adding Client Certificate to Service Principal in Azure AD declined by user.'
+                    Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'AddAzureAdClientCertificateUserDeclined'
                 }
             }
         }

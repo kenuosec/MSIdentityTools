@@ -13,7 +13,7 @@ Set-StrictMode -Version 3.0
 
 [scriptblock] $MsalAuthentication = {
     param(
-        [parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [object] $ClientApplication,
 
         [Parameter(Mandatory=$false)]

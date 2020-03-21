@@ -4,7 +4,7 @@
 .EXAMPLE
    Get-MsftTenantDiscoveryInstance https://login.windows.net/common/oauth2/v2.0/authorize
 .EXAMPLE
-   'https://login.windows.net/common/oauth2/v2.0/authorize','user2@domainA.com' | Get-MsftTenantDiscoveryInstance
+   'https://login.windows.net/common/oauth2/v2.0/authorize' | Get-MsftTenantDiscoveryInstance
 #>
 function Get-MsftTenantDiscoveryInstance {
     [CmdletBinding()]

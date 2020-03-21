@@ -8,7 +8,10 @@
     Get list of URLs and IP ranges for O365 Worldwide cloud.
 .EXAMPLE
     PS C:\>Get-O365Endpoints -Cloud China -ServiceAreas Exchange,SharePoint
-    Get list of IP ranges for Exchange and SharePoint in O365 China Cloud.
+    Get list of URLs and IP ranges for Exchange and SharePoint in O365 China Cloud.
+.EXAMPLE
+    PS C:\>Get-O365Endpoints -Cloud Worldwide -ServiceAreas Common | Where-Object id -In 54,56,59,96
+    Get list of URLs and IP ranges related to Azure Active Directory.
 .INPUTS
     System.String
 #>

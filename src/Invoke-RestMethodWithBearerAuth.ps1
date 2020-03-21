@@ -4,11 +4,14 @@ function Invoke-RestMethodWithBearerAuth {
     [Alias('Invoke-RestMethodWithMsal')]
     param(
 
-        [parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [object] $ClientApplication,
 
         [Parameter(Mandatory=$false)]
         [string[]] $Scopes,
+
+        [Parameter(Mandatory=$false)]
+        [switch] $NewTokenCache,
 
         [Microsoft.PowerShell.Commands.WebRequestMethod]
         ${Method},
@@ -93,33 +96,7 @@ function Invoke-RestMethodWithBearerAuth {
     begin
     {
         ## Cmdlet Extention
-        if ($ClientApplication -is [Microsoft.Identity.Client.IClientApplicationBase])
-        {
-            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication
-        }
-        elseif ($ClientApplication -is [Microsoft.Identity.Client.ApplicationOptions])
-        {
-            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ClientApplication | Get-MsalClientApplication -CreateIfMissing
-        }
-        elseif ($ClientApplication -is [hashtable])
-        {
-            if ($ClientApplication.ContainsKey('ClientSecret') -or $ClientApplication.ContainsKey('ClientCertificate')) {
-                [Microsoft.Identity.Client.ConfidentialClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.ConfidentialClientApplicationOptions -Property $ClientApplication
-            }
-            else {
-                [Microsoft.Identity.Client.PublicClientApplicationOptions] $ApplicationOptions = New-Object Microsoft.Identity.Client.PublicClientApplicationOptions -Property $ClientApplication
-            }
-            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = $ApplicationOptions | Get-MsalClientApplication -CreateIfMissing
-        }
-        elseif ($ClientApplication -is [string])
-        {
-            [Microsoft.Identity.Client.IClientApplicationBase] $MsalClientApplication = Get-MsalClientApplication -ClientId $ClientApplication -CreateIfMissing
-        }
-        else {
-            # Otherwise, write a terminating error message indicating that input object type is not supported.
-            $errorMessage = "Cannot parse ClientApplication type [{0}]." -f $InputObject.GetType()
-            Write-Error -Message $errorMessage -Category ([System.Management.Automation.ErrorCategory]::ParserError) -ErrorId "InvokeRestMethodFailureTypeNotSupported"
-        }
+        $MsalClientApplication = Resolve-MsalClientApplication $ClientApplication -NewTokenCache:$NewTokenCache
 
         ## Get Token
         if ($PSBoundParameters.ContainsKey('Scopes'))
@@ -148,6 +125,7 @@ function Invoke-RestMethodWithBearerAuth {
         ## Remove extra parameters
         if ($PSBoundParameters.ContainsKey('ClientApplication')) { [void] $PSBoundParameters.Remove('ClientApplication') }
         if ($PSBoundParameters.ContainsKey('Scopes')) { [void] $PSBoundParameters.Remove('Scopes') }
+        if ($PSBoundParameters.ContainsKey('NewTokenCache')) { [void] $PSBoundParameters.Remove('NewTokenCache') }
 
         ## Resume Command
         try {

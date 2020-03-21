@@ -40,17 +40,13 @@ function New-AzureAdPowerShellClient {
 
     begin
     {
-        $AzureADSessionInfo = Initialize-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
+        $PSModule = Install-AzureAdModule -ErrorAction Stop
+        Import-Module -ModuleInfo $PSModule -ErrorAction Stop
+        $AzureADSessionInfo = Connect-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
         $spMSGraph = Get-AzureADServicePrincipal -Filter "DisplayName eq 'Microsoft Graph'" #-Filter "AppId eq '00000003-0000-0000-c000-000000000000'"
         $CurrentUser = Get-AzureADUser -Filter ("UserPrincipalName eq '{0}'" -f $AzureADSessionInfo.Account.Id)
 
-        $InvokeCommandMessage = @'
-
-{0}
-
-Do you want to invoke the above command(s)?
-'@
-
+        $InvokeCommandMessage = "`r`n{0}`r`n`r`nDo you want to invoke the above command(s)?"
         [System.Management.Automation.Host.ChoiceDescription[]] $ConfirmChoices = @(
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&Yes", "Continue with the operation."
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&No", "Do not proceed with the operation."
@@ -89,7 +85,7 @@ Do you want to invoke the above command(s)?
 
 `$AzureADApplication | Add-AzureADApplicationOwner -RefObjectId $($CurrentUser.ObjectId)
 "@
-        $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+        $Result = Write-HostPrompt 'Create New Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
         if ($Result -eq 0) {
             ## Create Application
             Write-Verbose ('Creating new Azure AD Application [{0}].' -f $paramAzureADApplication.DisplayName)
@@ -114,7 +110,7 @@ Do you want to invoke the above command(s)?
 
 `$AzureADServicePrincipal | Add-AzureADServicePrincipalOwner -RefObjectId $($CurrentUser.ObjectId)
 "@
-                $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Create New Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
                 if ($Result -eq 0) {
                     ## Create Service Principal
                     Write-Verbose ('Creating new Azure AD Service Principal from Application [{0}].' -f $AzureADApplication.DisplayName)
@@ -124,7 +120,15 @@ Do you want to invoke the above command(s)?
                     Write-Verbose ('Adding Current User [{0}] as Owner of Service Principal [{1}].' -f $CurrentUser.UserPrincipalName, $AzureADServicePrincipal.DisplayName)
                     $AzureADServicePrincipal | Add-AzureADServicePrincipalOwner -RefObjectId $CurrentUser.ObjectId
                 }
+                else {
+                    $Exception = New-Object OperationCanceledException -ArgumentList 'Creation of new service principal in Azure AD declined by user.'
+                    Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'NewAzureAdPowerShellClientUserDeclined'
+                }
             }
+        }
+        else {
+            $Exception = New-Object OperationCanceledException -ArgumentList 'Creation of new application in Azure AD declined by user.'
+            Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'NewAzureAdPowerShellClientUserDeclined'
         }
     }
 

@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0.5'
+ModuleVersion = '1.0.1.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -50,7 +50,7 @@ PowerShellVersion = '5.1'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(
-    @{ ModuleName='MSAL.PS'; Guid='c765c957-c730-4520-9c36-6a522e35d60b'; ModuleVersion='4.5.1.1' }
+    @{ ModuleName='MSAL.PS'; Guid='c765c957-c730-4520-9c36-6a522e35d60b'; ModuleVersion='4.10.0.1' }
 )
 
 # Assemblies that must be loaded prior to importing this module
@@ -71,7 +71,8 @@ NestedModules = @(
     '.\Add-AzureAdClientSecret.ps1'
     '.\Confirm-JsonWebSignature.ps1'
     '.\Confirm-JsonWebTokenSignature.ps1'
-    '.\Convert-JsonWebTokenPayload.ps1'
+    '.\Connect-AzureAdModule.ps1'
+    '.\Connect-AzureAdWithCustomApp.ps1'
     '.\ConvertFrom-AadcAadConnectorSpaceDn.ps1'
     '.\ConvertFrom-AadcSourceAnchor.ps1'
     '.\ConvertFrom-Base64String.ps1'
@@ -82,6 +83,7 @@ NestedModules = @(
     '.\ConvertTo-PsParameterString.ps1'
     '.\ConvertTo-PsString.ps1'
     '.\ConvertTo-QueryString.ps1'
+    '.\Expand-JsonWebTokenPayload.ps1'
     '.\Get-AzureIpRange.ps1'
     '.\Get-MsftFederationProvider.ps1'
     '.\Get-MsftIdentityAssociation.ps1'
@@ -92,13 +94,14 @@ NestedModules = @(
     '.\Get-O365Endpoints.ps1'
     '.\Get-OpenIdProviderConfiguration.ps1'
     '.\Get-SamlFederationMetadata.ps1'
-    '.\Initialize-AzureAdModule.ps1'
+    '.\Install-AzureAdModule.ps1'
     '.\Invoke-CommandAsSystem.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
     '.\New-AzureAdClientCertificate.ps1'
     '.\New-AzureAdClientSecret.ps1'
     '.\New-AzureAdPowerShellClient.ps1'
     '.\New-AzureAdUserPassword.ps1'
+    '.\Resolve-MsalClientApplication.ps1'
     '.\Test-AzureAdDeviceRegConnectivity.ps1'
     '.\Write-HostPrompt.ps1'
 )
@@ -109,25 +112,29 @@ FunctionsToExport = @(
     'Add-AzureAdClientSecret'
     'Confirm-JsonWebSignature'
     'Confirm-JsonWebTokenSignature'
-    'Convert-JsonWebTokenPayload'
+    #'Connect-AzureAdModule'
+    'Connect-AzureAdWithCustomApp'
     'ConvertFrom-AadcAadConnectorSpaceDn'
     'ConvertFrom-AadcSourceAnchor'
     'ConvertFrom-JsonWebSignature'
+    'Expand-JsonWebTokenPayload'
     'Get-AzureIpRange'
     #'Get-MsftFederationProvider'
     'Get-MsftIdentityAssociation'
     'Get-MsftIdpAuthority'
-    #'Get-MsftTenantDiscoveryInstance'
+    'Get-MsftTenantDiscoveryInstance'
     #'Get-MsftUserIdPs'
     'Get-MsftUserRealm'
     'Get-O365Endpoints'
     'Get-OpenIdProviderConfiguration'
     'Get-SamlFederationMetadata'
+    'Install-AzureAdModule'
     'Invoke-RestMethodWithBearerAuth'
     'New-AzureAdClientCertificate'
     'New-AzureAdClientSecret'
     'New-AzureAdPowerShellClient'
     'New-AzureAdUserPassword'
+    #'Resolve-MsalClientApplication'
     'Test-AzureAdDeviceRegConnectivity'
 )
 
@@ -139,7 +146,13 @@ VariablesToExport = @()
 
 # Aliases to export from this module
 AliasesToExport = @(
+    'Confirm-Jws'
+    'Confirm-JwtSignature'
+    'ConvertFrom-Jws'
+    'ConvertFrom-JsonWebToken'
+    'ConvertFrom-Jwt'
     'ConvertFrom-AzureAdImmutableId'
+    'Expand-JwtPayload'
     'Get-WsFedFederationMetadata'
 )
 

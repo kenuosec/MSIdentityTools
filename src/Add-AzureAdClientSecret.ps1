@@ -39,15 +39,11 @@ function Add-AzureAdClientSecret {
 
     begin
     {
-        $AzureADSessionInfo = Initialize-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
+        $PSModule = Install-AzureAdModule -ErrorAction Stop
+        Import-Module -ModuleInfo $PSModule -ErrorAction Stop
+        $AzureADSessionInfo = Connect-AzureAdModule -TenantId $TenantId -AccountId $AccountId -ErrorAction Stop
 
-        $InvokeCommandMessage = @'
-
-{0}
-
-Do you want to invoke the above command(s)?
-'@
-
+        $InvokeCommandMessage = "`r`n{0}`r`n`r`nDo you want to invoke the above command(s)?"
         [System.Management.Automation.Host.ChoiceDescription[]] $ConfirmChoices = @(
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&Yes", "Continue with the operation."
             New-Object System.Management.Automation.Host.ChoiceDescription -ArgumentList "&No", "Do not proceed with the operation."
@@ -66,7 +62,6 @@ Do you want to invoke the above command(s)?
 
         ## Generate Secret
         [securestring] $ClientSecret = New-AzureAdClientSecret -Length $Length
-        Write-Output $ClientSecret
 
         ## Add Secret
         $paramPasswordCredential = [ordered]@{
@@ -78,19 +73,30 @@ Do you want to invoke the above command(s)?
         switch ($AzureADObject.ObjectType) {
             'Application' {
                 $Message = $InvokeCommandMessage -f ("New-AzureADApplicationPasswordCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramPasswordCredential -Compact)" -replace ([regex]::Escape($paramPasswordCredential.Value)),'*****')
-                $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Secret to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
                 if ($Result -eq 0) {
                     New-AzureADApplicationPasswordCredential -ObjectId $AzureADObject.ObjectId @paramPasswordCredential | Out-Null
+                }
+                else {
+                    $Exception = New-Object OperationCanceledException -ArgumentList 'Adding Client Secret to Application in Azure AD declined by user.'
+                    Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'AddAzureAdClientSecretUserDeclined'
                 }
             }
             'ServicePrincipal' {
                 $Message = $InvokeCommandMessage -f ("New-AzureADServicePrincipalPasswordCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramPasswordCredential -Compact)" -replace ([regex]::Escape($paramPasswordCredential.Value)),'*****')
-                $Result = Write-HostPrompt 'Confirm:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Secret to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
                 if ($Result -eq 0) {
                     New-AzureADServicePrincipalPasswordCredential -ObjectId $AzureADObject.ObjectId @paramPasswordCredential | Out-Null
                 }
+                else {
+                    $Exception = New-Object OperationCanceledException -ArgumentList 'Adding Client Secret to Service Principal in Azure AD declined by user.'
+                    Write-Error -Exception $Exception -Category ([System.Management.Automation.ErrorCategory]::OperationStopped) -CategoryActivity $MyInvocation.MyCommand -ErrorId 'AddAzureAdClientSecretUserDeclined'
+                }
             }
         }
+
+        ## Return Client Secret
+        Write-Output $ClientSecret
     }
 
     end {
