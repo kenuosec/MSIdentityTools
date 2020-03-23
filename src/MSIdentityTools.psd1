@@ -102,6 +102,7 @@ NestedModules = @(
     '.\New-AzureAdPowerShellClient.ps1'
     '.\New-AzureAdUserPassword.ps1'
     '.\Resolve-MsalClientApplication.ps1'
+    '.\Show-JsonWebToken.ps1'
     '.\Test-AzureAdDeviceRegConnectivity.ps1'
     '.\Write-HostPrompt.ps1'
 )
@@ -135,6 +136,7 @@ FunctionsToExport = @(
     'New-AzureAdPowerShellClient'
     'New-AzureAdUserPassword'
     #'Resolve-MsalClientApplication'
+    'Show-JsonWebToken'
     'Test-AzureAdDeviceRegConnectivity'
 )
 
