@@ -10,7 +10,6 @@
 function Show-JsonWebToken {
     [CmdletBinding()]
     [Alias('Show-Jwt')]
-    [OutputType([PSCustomObject])]
     param (
         # JSON Web Signature (JWS)
         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
