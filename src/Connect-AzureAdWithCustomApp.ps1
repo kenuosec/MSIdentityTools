@@ -28,10 +28,10 @@ function Connect-AzureAdWithCustomApp {
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $TenantId,
         # Scopes required by AzureAD PowerShell Module for AAD Graph
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$false, ParameterSetName='PublicClient', ValueFromPipelineByPropertyName=$true)]
         [string[]] $AadGraphScopes = 'https://graph.windows.net/Directory.AccessAsUser.All',
         # Scopes required by AzureAD PowerShell Module for MS Graph
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$false, ParameterSetName='PublicClient', ValueFromPipelineByPropertyName=$true)]
         [string[]] $MsGraphScopes = @(
             'https://graph.microsoft.com/AuditLog.Read.All'
             'https://graph.microsoft.com/Directory.AccessAsUser.All'
@@ -75,10 +75,12 @@ function Connect-AzureAdWithCustomApp {
             Connect-AzureAD -TenantId $AadGraphToken.TenantId -AadAccessToken $AadGraphToken.AccessToken -MsAccessToken $MsGraphToken.AccessToken -AccountId $AadGraphToken.Account.Username
         }
         else {
+            Write-Warning 'Using a confidential client is non-interactive requires that the necessary scopes/permissions be added to the application or have permissions on-behalf-of a user.'
             $AadGraphToken = Get-MsalToken $MsalClientApplication -AzureCloudInstance $AzureEnvironmentName -TenantId $TenantId -Scopes 'https://graph.windows.net/.default' -ErrorAction Stop
             $MsGraphToken = Get-MsalToken $MsalClientApplication -AzureCloudInstance $AzureEnvironmentName -TenantId $TenantId -Scopes 'https://graph.microsoft.com/.default' -ErrorAction Stop
-            $JwtPayload = Expand-JwtPayload $AadGraphToken.AccessToken
+            $JwtPayload = Expand-JsonWebTokenPayload $AadGraphToken.AccessToken
             Connect-AzureAD -TenantId $JwtPayload.tid -AadAccessToken $AadGraphToken.AccessToken -MsAccessToken $MsGraphToken.AccessToken -AccountId $JwtPayload.sub
         }
+        Write-Warning ('Because this command connects the AzureAD module by obtaining access tokens outside the module itself, the AzureAD module commands cannot automatically refresh the tokens when they expire or are revoked. To maintain access, this command must be run again when the current token expires at "{0:t}".' -f [System.DateTimeOffset]::FromUnixTimeSeconds((Expand-JsonWebTokenPayload $AadGraphToken.AccessToken).exp).ToLocalTime())
     }
 }
