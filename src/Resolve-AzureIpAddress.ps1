@@ -5,6 +5,9 @@
     PS C:\>$IpAddress = Resolve-DnsName login.microsoftonline.com | Where-Object QueryType -eq A | Select-Object -First 1 -ExpandProperty IPAddress
     PS C:\>Resolve-AzureIpAddress $IpAddress
     Lookup Azure IP address for Azure Cloud, Region, and Service Tag.
+.EXAMPLE
+    PS C:\>Resolve-AzureIpAddress graph.microsoft.com
+    Lookup Azure IP address for Azure Cloud, Region, and Service Tag.
 .INPUTS
     System.String
     System.Net.IPAddress
@@ -27,7 +30,7 @@ function Resolve-AzureIpAddress {
         $PreviousProgressPreference = $ProgressPreference
         $ProgressPreference = 'SilentlyContinue'
         foreach ($Cloud in $Clouds) {
-            $ServiceTagAndRegions.Add($Cloud, (Get-AzureIpRange -Cloud $Cloud -AllServiceTagsAndRegions))
+            $ServiceTagAndRegions.Add($Cloud, (Get-AzureIpRange -Cloud $Cloud -AllServiceTagsAndRegions -Verbose:$false))
         }
         $ProgressPreference = $PreviousProgressPreference
     }
