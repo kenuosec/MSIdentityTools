@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.1.0'
+ModuleVersion = '1.0.1.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -101,9 +101,11 @@ NestedModules = @(
     '.\New-AzureAdClientSecret.ps1'
     '.\New-AzureAdPowerShellClient.ps1'
     '.\New-AzureAdUserPassword.ps1'
+    '.\Resolve-AzureIpAddress.ps1'
     '.\Resolve-MsalClientApplication.ps1'
     '.\Show-JsonWebToken.ps1'
     '.\Test-AzureAdDeviceRegConnectivity.ps1'
+    '.\Test-IpAddressInSubnet.ps1'
     '.\Write-HostPrompt.ps1'
 )
 
@@ -135,6 +137,7 @@ FunctionsToExport = @(
     'New-AzureAdClientSecret'
     'New-AzureAdPowerShellClient'
     'New-AzureAdUserPassword'
+    'Resolve-AzureIpAddress'
     #'Resolve-MsalClientApplication'
     'Show-JsonWebToken'
     'Test-AzureAdDeviceRegConnectivity'
