@@ -159,6 +159,7 @@ AliasesToExport = @(
     'ConvertFrom-AzureAdImmutableId'
     'Expand-JwtPayload'
     'Get-WsFedFederationMetadata'
+    'Show-Jwt'
 )
 
 # DSC resources to export from this module
