@@ -37,7 +37,7 @@ function ConvertFrom-JsonWebSignature {
                 Payload = $JwsPayload
                 Signature = $JwsComponents[2] | ConvertFrom-Base64String -Base64Url -RawBytes
             }
-            Write-Output $JwsDecoded
+            Write-Output ($JwsDecoded | Select-Object -Property Header,Payload,Signature)
         }
     }
 }
