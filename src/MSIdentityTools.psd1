@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.2'
+ModuleVersion = '1.0.5'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -79,6 +79,7 @@ NestedModules = @(
     '.\ConvertFrom-HexString.ps1'
     '.\ConvertFrom-JsonWebSignature.ps1'
     '.\ConvertFrom-SecureStringAsPlainText.ps1'
+    '.\ConvertFrom-QueryString.ps1'
     '.\ConvertTo-Base64String.ps1'
     '.\ConvertTo-PsParameterString.ps1'
     '.\ConvertTo-PsString.ps1'
@@ -95,6 +96,7 @@ NestedModules = @(
     '.\Get-OpenIdProviderConfiguration.ps1'
     '.\Get-SamlFederationMetadata.ps1'
     '.\Install-AzureAdModule.ps1'
+    '.\Invoke-AzureAdGraphQuery.ps1'
     '.\Invoke-CommandAsSystem.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
     '.\New-AzureAdClientCertificate.ps1'
@@ -132,6 +134,7 @@ FunctionsToExport = @(
     'Get-OpenIdProviderConfiguration'
     'Get-SamlFederationMetadata'
     'Install-AzureAdModule'
+    'Invoke-AzureAdGraphQuery'
     'Invoke-RestMethodWithBearerAuth'
     'New-AzureAdClientCertificate'
     'New-AzureAdClientSecret'

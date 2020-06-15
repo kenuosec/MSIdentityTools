@@ -1,17 +1,20 @@
 # .ExternalHelp MSIdentityTools-Help.xml
 function Invoke-RestMethodWithBearerAuth {
-    [CmdletBinding(HelpUri='https://go.microsoft.com/fwlink/?LinkID=217034')]
+    [CmdletBinding(HelpUri = 'https://go.microsoft.com/fwlink/?LinkID=217034')]
     [Alias('Invoke-RestMethodWithMsal')]
     param(
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [object] $ClientApplication,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [string[]] $Scopes,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [switch] $NewTokenCache,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $FollowODataNextLink,
 
         [Microsoft.PowerShell.Commands.WebRequestMethod]
         ${Method},
@@ -19,7 +22,7 @@ function Invoke-RestMethodWithBearerAuth {
         [switch]
         ${UseBasicParsing},
 
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [uri]
         ${Uri},
@@ -73,14 +76,14 @@ function Invoke-RestMethodWithBearerAuth {
         [switch]
         ${ProxyUseDefaultCredentials},
 
-        [Parameter(ValueFromPipeline=$true)]
+        [Parameter(ValueFromPipeline = $true)]
         [System.Object]
         ${Body},
 
         [string]
         ${ContentType},
 
-        [ValidateSet('chunked','compress','deflate','gzip','identity')]
+        [ValidateSet('chunked', 'compress', 'deflate', 'gzip', 'identity')]
         [string]
         ${TransferEncoding},
 
@@ -93,18 +96,16 @@ function Invoke-RestMethodWithBearerAuth {
         [switch]
         ${PassThru})
 
-    begin
-    {
+    begin {
         ## Cmdlet Extention
         $MsalClientApplication = Resolve-MsalClientApplication $ClientApplication -NewTokenCache:$NewTokenCache
 
         ## Get Token
-        if ($PSBoundParameters.ContainsKey('Scopes'))
-        {
-            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken -Scopes $PSBoundParameters['Scopes']
+        if ($PSBoundParameters.ContainsKey('Scopes')) {
+            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken -Scopes $Scopes
         }
         else {
-            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken
+            [Microsoft.Identity.Client.AuthenticationResult] $MsalToken = $MsalClientApplication | Get-MsalToken -Scopes ('https://{0}/.default' -f $Uri.Host)
         }
 
         ## Inject bearer token
@@ -112,7 +113,7 @@ function Invoke-RestMethodWithBearerAuth {
             [System.Collections.IDictionary] $Headers = $PSBoundParameters['Headers']
         }
         else {
-            [System.Collections.IDictionary] $Headers = @{}
+            [System.Collections.IDictionary] $Headers = @{ }
             $PSBoundParameters.Add('Headers', $Headers)
         }
         if ($Headers.ContainsKey('Authorization')) {
@@ -126,37 +127,59 @@ function Invoke-RestMethodWithBearerAuth {
         if ($PSBoundParameters.ContainsKey('ClientApplication')) { [void] $PSBoundParameters.Remove('ClientApplication') }
         if ($PSBoundParameters.ContainsKey('Scopes')) { [void] $PSBoundParameters.Remove('Scopes') }
         if ($PSBoundParameters.ContainsKey('NewTokenCache')) { [void] $PSBoundParameters.Remove('NewTokenCache') }
+        if ($PSBoundParameters.ContainsKey('FollowODataNextLink')) { [void] $PSBoundParameters.Remove('FollowODataNextLink') }
+
+        ## Return all results
+        if ($FollowODataNextLink) {
+            $results = Invoke-RestMethod @PSBoundParameters
+            Write-Output $results
+            [void] $PSBoundParameters.Remove('Uri')
+
+            while ($results.PSObject.Properties['@odata.nextLink']) {
+                $results = Invoke-RestMethod -Uri $results.'@odata.nextLink' @PSBoundParameters
+                Write-Output $results
+            }
+            return
+        }
 
         ## Resume Command
         try {
             $outBuffer = $null
-            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-            {
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
                 $PSBoundParameters['OutBuffer'] = 1
             }
             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Invoke-RestMethod', [System.Management.Automation.CommandTypes]::Cmdlet)
-            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $scriptCmd = { & $wrappedCmd @PSBoundParameters }
             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
             $steppablePipeline.Begin($PSCmdlet)
-        } catch {
+        }
+        catch {
             throw
         }
     }
 
-    process
-    {
+    process {
+        ## Command Extension
+        if ($FollowODataNextLink) { return }
+
+        ## Resume Command
         try {
             $steppablePipeline.Process($_)
-        } catch {
+        }
+        catch {
             throw
         }
     }
 
-    end
-    {
+    end {
+        ## Command Extension
+        if ($FollowODataNextLink) { return }
+
+        ## Resume Command
         try {
             $steppablePipeline.End()
-        } catch {
+        }
+        catch {
             throw
         }
     }
