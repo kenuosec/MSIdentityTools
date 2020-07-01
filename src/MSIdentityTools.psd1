@@ -108,6 +108,7 @@ NestedModules = @(
     '.\Show-JsonWebToken.ps1'
     '.\Test-AzureAdDeviceRegConnectivity.ps1'
     '.\Test-IpAddressInSubnet.ps1'
+    '.\Test-MsftAvailableSigninNames.ps1'
     '.\Write-HostPrompt.ps1'
 )
 
