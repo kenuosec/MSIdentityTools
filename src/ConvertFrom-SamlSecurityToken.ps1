@@ -25,7 +25,12 @@ function ConvertFrom-SamlSecurityToken {
     process {
         foreach ($InputObject in $InputObjects) {
             $xmlOutput = New-Object xml
-            $bytesInput = [System.Convert]::FromBase64String($InputObject)
+            try {
+                $bytesInput = [System.Convert]::FromBase64String($InputObject)
+            }
+            catch {
+                $bytesInput = [System.Convert]::FromBase64String([System.Net.WebUtility]::UrlDecode($InputObject))
+            }
             try {
                 $streamInput = New-Object System.IO.MemoryStream -ArgumentList @($bytesInput, $false)
                 try {
