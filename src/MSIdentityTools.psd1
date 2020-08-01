@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.6'
+ModuleVersion = '1.0.7'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -78,8 +78,9 @@ NestedModules = @(
     '.\ConvertFrom-Base64String.ps1'
     '.\ConvertFrom-HexString.ps1'
     '.\ConvertFrom-JsonWebSignature.ps1'
-    '.\ConvertFrom-SecureStringAsPlainText.ps1'
     '.\ConvertFrom-QueryString.ps1'
+    '.\ConvertFrom-SamlSecurityToken.ps1'
+    '.\ConvertFrom-SecureStringAsPlainText.ps1'
     '.\ConvertTo-Base64String.ps1'
     '.\ConvertTo-PsParameterString.ps1'
     '.\ConvertTo-PsString.ps1'
@@ -106,6 +107,7 @@ NestedModules = @(
     '.\Resolve-AzureIpAddress.ps1'
     '.\Resolve-MsalClientApplication.ps1'
     '.\Show-JsonWebToken.ps1'
+    '.\Show-SamlSecurityToken.ps1'
     '.\Test-AzureAdDeviceRegConnectivity.ps1'
     '.\Test-IpAddressInSubnet.ps1'
     '.\Test-MsftAvailableSigninNames.ps1'
@@ -123,6 +125,7 @@ FunctionsToExport = @(
     'ConvertFrom-AadcAadConnectorSpaceDn'
     'ConvertFrom-AadcSourceAnchor'
     'ConvertFrom-JsonWebSignature'
+    'ConvertFrom-SamlSecurityToken'
     'Expand-JsonWebTokenPayload'
     'Get-AzureIpRange'
     #'Get-MsftFederationProvider'
@@ -144,6 +147,7 @@ FunctionsToExport = @(
     'Resolve-AzureIpAddress'
     #'Resolve-MsalClientApplication'
     'Show-JsonWebToken'
+    'Show-SamlSecurityToken'
     'Test-AzureAdDeviceRegConnectivity'
 )
 
