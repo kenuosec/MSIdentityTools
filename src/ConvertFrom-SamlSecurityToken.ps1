@@ -24,37 +24,44 @@ function ConvertFrom-SamlSecurityToken {
 
     process {
         foreach ($InputObject in $InputObjects) {
+            [byte[]] $bytesInput = $null
             $xmlOutput = New-Object xml
             try {
-                $bytesInput = [System.Convert]::FromBase64String($InputObject)
+                $xmlOutput.LoadXml($InputObject)
             }
             catch {
-                $bytesInput = [System.Convert]::FromBase64String([System.Net.WebUtility]::UrlDecode($InputObject))
-            }
-            try {
-                $streamInput = New-Object System.IO.MemoryStream -ArgumentList @($bytesInput, $false)
                 try {
-                    $xmlOutput.Load($streamInput)
+                    $bytesInput = [System.Convert]::FromBase64String($InputObject)
                 }
                 catch {
-                    $streamInput = New-Object System.IO.MemoryStream -ArgumentList @($bytesInput, $false)
-                    try {
-                        $streamOutput = New-Object System.IO.MemoryStream
-                        try {
-                            [System.IO.Compression.DeflateStream] $streamCompression = New-Object System.IO.Compression.DeflateStream -ArgumentList $streamInput, ([System.IO.Compression.CompressionMode]::Decompress)
-                            $streamCompression.CopyTo($streamOutput)
-                        }
-                        finally { $streamCompression.Dispose() }
-
-                        $streamOutput.Position = 0
-                        $xmlOutput.Load($streamOutput)
-                        #[string] $strOutput = ([Text.Encoding]::$Encoding.GetString($streamOutput.ToArray()))
-                        #$xmlOutput.LoadXml($strOutput)
-                    }
-                    finally { $streamOutput.Dispose() }
+                    $bytesInput = [System.Convert]::FromBase64String([System.Net.WebUtility]::UrlDecode($InputObject))
                 }
             }
-            finally { $streamInput.Dispose() }
+            if ($bytesInput) {
+                try {
+                    $streamInput = New-Object System.IO.MemoryStream -ArgumentList @($bytesInput, $false)
+                    try {
+                        $xmlOutput.Load($streamInput)
+                    }
+                    catch {
+                        $streamInput = New-Object System.IO.MemoryStream -ArgumentList @($bytesInput, $false)
+                        try {
+                            $streamOutput = New-Object System.IO.MemoryStream
+                            try {
+                                [System.IO.Compression.DeflateStream] $streamCompression = New-Object System.IO.Compression.DeflateStream -ArgumentList $streamInput, ([System.IO.Compression.CompressionMode]::Decompress), $true
+                                $streamCompression.CopyTo($streamOutput)
+                            }
+                            finally { $streamCompression.Dispose() }
+                            $streamOutput.Position = 0
+                            $xmlOutput.Load($streamOutput)
+                            #[string] $strOutput = ([Text.Encoding]::$Encoding.GetString($streamOutput.ToArray()))
+                            #$xmlOutput.LoadXml($strOutput)
+                        }
+                        finally { $streamOutput.Dispose() }
+                    }
+                }
+                finally { $streamInput.Dispose() }
+            }
 
             Write-Output $xmlOutput
         }

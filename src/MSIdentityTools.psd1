@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.7'
+ModuleVersion = '1.1.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -69,6 +69,7 @@ RequiredModules = @(
 NestedModules = @(
     '.\Add-AzureAdClientCertificate.ps1'
     '.\Add-AzureAdClientSecret.ps1'
+    '.\Compress-Data.ps1'
     '.\Confirm-JsonWebSignature.ps1'
     '.\Confirm-JsonWebTokenSignature.ps1'
     '.\Connect-AzureAdModule.ps1'
@@ -100,10 +101,12 @@ NestedModules = @(
     '.\Invoke-AzureAdGraphQuery.ps1'
     '.\Invoke-CommandAsSystem.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
+    '.\Invoke-SamlRequest.ps1'
     '.\New-AzureAdClientCertificate.ps1'
     '.\New-AzureAdClientSecret.ps1'
     '.\New-AzureAdPowerShellClient.ps1'
     '.\New-AzureAdUserPassword.ps1'
+    '.\New-SamlRequest.ps1'
     '.\Resolve-AzureIpAddress.ps1'
     '.\Resolve-MsalClientApplication.ps1'
     '.\Show-JsonWebToken.ps1'
@@ -140,10 +143,12 @@ FunctionsToExport = @(
     'Install-AzureAdModule'
     'Invoke-AzureAdGraphQuery'
     'Invoke-RestMethodWithBearerAuth'
+    'Invoke-SamlRequest'
     'New-AzureAdClientCertificate'
     'New-AzureAdClientSecret'
     'New-AzureAdPowerShellClient'
     'New-AzureAdUserPassword'
+    'New-SamlRequest'
     'Resolve-AzureIpAddress'
     #'Resolve-MsalClientApplication'
     'Show-JsonWebToken'

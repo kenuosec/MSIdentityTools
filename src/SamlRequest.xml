@@ -1,0 +1,4 @@
+<samlp:AuthnRequest xmlns="urn:oasis:names:tc:SAML:2.0:metadata" ID="" Version="2.0" IssueInstant="" IsPassive="false" AssertionConsumerServiceURL=""
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ForceAuthn="false">
+    <Issuer xmlns="urn:oasis:names:tc:SAML:2.0:assertion">Issuer</Issuer>
+</samlp:AuthnRequest>
