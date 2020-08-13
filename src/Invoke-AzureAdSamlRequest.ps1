@@ -3,12 +3,12 @@
    Invoke Saml Request on Azure AD.
 .EXAMPLE
     PS C:\>$samlRequest = New-SamlRequest -Issuer 'urn:microsoft:adfs:claimsxray'
-    PS C:\>Invoke-SamlRequest $samlRequest.OuterXml
+    PS C:\>Invoke-AzureAdSamlRequest $samlRequest.OuterXml
     Create new Saml Request for Claims X-Ray and Invoke on Azure AD.
 .INPUTS
     System.String
 #>
-function Invoke-SamlRequest {
+function Invoke-AzureAdSamlRequest {
     [CmdletBinding()]
     [OutputType()]
     param (

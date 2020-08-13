@@ -10,7 +10,7 @@
 RootModule = 'MSIdentityTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.0'
+ModuleVersion = '1.1.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core','Desktop'
@@ -99,9 +99,9 @@ NestedModules = @(
     '.\Get-SamlFederationMetadata.ps1'
     '.\Install-AzureAdModule.ps1'
     '.\Invoke-AzureAdGraphQuery.ps1'
+    '.\Invoke-AzureAdSamlRequest.ps1'
     '.\Invoke-CommandAsSystem.ps1'
     '.\Invoke-RestMethodWithBearerAuth.ps1'
-    '.\Invoke-SamlRequest.ps1'
     '.\New-AzureAdClientCertificate.ps1'
     '.\New-AzureAdClientSecret.ps1'
     '.\New-AzureAdPowerShellClient.ps1'
@@ -142,8 +142,8 @@ FunctionsToExport = @(
     'Get-SamlFederationMetadata'
     'Install-AzureAdModule'
     'Invoke-AzureAdGraphQuery'
+    'Invoke-AzureAdSamlRequest'
     'Invoke-RestMethodWithBearerAuth'
-    'Invoke-SamlRequest'
     'New-AzureAdClientCertificate'
     'New-AzureAdClientSecret'
     'New-AzureAdPowerShellClient'
@@ -166,13 +166,16 @@ VariablesToExport = @()
 AliasesToExport = @(
     'Confirm-Jws'
     'Confirm-JwtSignature'
+    'ConvertFrom-AzureAdImmutableId'
     'ConvertFrom-Jws'
     'ConvertFrom-JsonWebToken'
     'ConvertFrom-Jwt'
-    'ConvertFrom-AzureAdImmutableId'
+    'ConvertFrom-SamlRequest'
+    'ConvertFrom-SamlResponse'
     'Expand-JwtPayload'
     'Get-WsFedFederationMetadata'
     'Show-Jwt'
+    'Show-SamlResponse'
 )
 
 # DSC resources to export from this module
@@ -191,7 +194,7 @@ AliasesToExport = @(
 PrivateData = @{
     PSData = @{
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Microsoft', 'Identity', 'Azure', 'AzureActiveDirectory', 'AzureAD', 'AAD', 'ActiveDirectory', 'AD', 'AzureADConnect', 'AADC', 'OAuth', 'OpenIdConnect', 'OIDC','JsonWebSignature','JWS','JsonWebToken','JWT'
+            Tags   = 'Microsoft', 'Identity', 'Azure', 'AzureActiveDirectory', 'AzureAD', 'AAD', 'ActiveDirectory', 'AD', 'AzureADConnect', 'AADC', 'OAuth', 'OpenIdConnect', 'OIDC', 'JsonWebSignature', 'JWS', 'JsonWebToken', 'JWT', 'Security Assertion Markup Language', 'SAML', 'PSEdition_Desktop', 'PSEdition_Core', 'Windows', 'Linux', 'MacOS'
 
         # A URL to the license for this module.
         LicenseUri = 'https://raw.githubusercontent.com/jasoth/MSIdentityTools/master/LICENSE'
