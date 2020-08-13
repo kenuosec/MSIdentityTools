@@ -25,7 +25,10 @@ function New-SamlRequest {
         [switch] $ForceAuthn,
         # Deflate and Base64 Encode the Saml Request
         [Parameter(Mandatory = $false)]
-        [switch] $DeflateAndEncode
+        [switch] $DeflateAndEncode,
+        # Url Encode the Deflated and Base64 Encoded Saml Request
+        [Parameter(Mandatory = $false)]
+        [switch] $UrlEncode
     )
 
     begin {
@@ -44,7 +47,8 @@ function New-SamlRequest {
 
         if ($DeflateAndEncode) {
             $EncodedSamlRequest = $xmlSamlRequest.OuterXml | Compress-Data | ConvertTo-Base64String
-            Write-Output $EncodedSamlRequest
+            if ($UrlEncode) { Write-Output ([System.Net.WebUtility]::UrlEncode($EncodedSamlRequest)) }
+            else { Write-Output $EncodedSamlRequest }
         }
         else {
             Write-Output $xmlSamlRequest
