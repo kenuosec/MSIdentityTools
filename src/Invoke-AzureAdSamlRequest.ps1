@@ -30,6 +30,7 @@ function Invoke-AzureAdSamlRequest {
                 SAMLRequest = $EncodedSamlRequest
             }
 
+            Write-Verbose ('Invoking Azure AD SAML2 Endpoint [{0}]' -f $uriAzureAD.Uri.AbsoluteUri)
             Start-Process $uriAzureAD.Uri.AbsoluteUri
         }
     }
