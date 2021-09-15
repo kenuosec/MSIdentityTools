@@ -14,18 +14,23 @@ function Invoke-AzureAdSamlRequest {
     param (
         # SAML Request
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [string[]] $InputObjects,
+        [object[]] $InputObjects,
         # Azure AD Tenant Id
         [Parameter(Mandatory = $false)]
-        [string] $TenatId = 'common'
+        [string] $TenantId = 'common'
     )
 
     process {
         foreach ($InputObject in $InputObjects) {
-            $xmlSamlRequest = ConvertFrom-SamlSecurityToken $InputObjects
+            if ($InputObject -is [string]) {
+                $xmlSamlRequest = ConvertFrom-SamlSecurityToken $InputObjects
+            }
+            else {
+                $xmlSamlRequest = $InputObject
+            }
             $EncodedSamlRequest = $xmlSamlRequest.OuterXml | Compress-Data | ConvertTo-Base64String
 
-            [System.UriBuilder] $uriAzureAD = 'https://login.microsoftonline.com/{0}/saml2' -f $TenatId
+            [System.UriBuilder] $uriAzureAD = 'https://login.microsoftonline.com/{0}/saml2' -f $TenantId
             $uriAzureAD.Query = ConvertTo-QueryString @{
                 SAMLRequest = $EncodedSamlRequest
             }
