@@ -34,7 +34,7 @@ function Connect-AzureAdModule {
         if ($AccountId) { $paramConnectAzureAD['AccountId'] = $AccountId }
 
         $Message = $InvokeCommandMessage -f "Connect-AzureAD $(ConvertTo-PsParameterString $paramConnectAzureAD -Compact)"
-        $Result = Write-HostPrompt 'Connect to Azure AD Tenant:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+        $Result = Write-HostPrompt 'Connect to Azure AD Tenant:' $Message -Choices $ConfirmChoices -DefaultChoice 1
         if ($Result -eq 0) {
             Connect-AzureAD -ErrorAction Stop @paramConnectAzureAD
         }

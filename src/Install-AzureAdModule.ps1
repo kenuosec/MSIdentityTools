@@ -23,7 +23,7 @@ function Install-AzureAdModule {
         if (!$PSModule) {
             $Message = $InvokeCommandMessage -f "Install-Module AzureAD"
 
-            $Result = Write-HostPrompt 'Install AzureAD PowerShell Module:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+            $Result = Write-HostPrompt 'Install AzureAD PowerShell Module:' $Message -Choices $ConfirmChoices -DefaultChoice 1
             if ($Result -eq 0) {
                 Install-Module AzureAD -Confirm:$false -Force:$false -ErrorAction Stop
                 $PSModule = Get-Module AzureAD -ListAvailable
@@ -43,7 +43,7 @@ Install-Module -Name AzureAD.Standard.Preview -MaximumVersion 0.1.599.0
 Unregister-PSRepository PSTestGallery
 "@
 
-            $Result = Write-HostPrompt 'Install AzureAD.Standard.Preview PowerShell Module for PowerShell Core:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+            $Result = Write-HostPrompt 'Install AzureAD.Standard.Preview PowerShell Module for PowerShell Core:' $Message -Choices $ConfirmChoices -DefaultChoice 1
             if ($Result -eq 0) {
                 try {
                     $PSRepository = Get-PSRepository | Where-Object SourceLocation -eq 'https://www.poshtestgallery.com/api/v2'

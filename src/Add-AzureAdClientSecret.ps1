@@ -73,7 +73,7 @@ function Add-AzureAdClientSecret {
         switch ($AzureADObject.ObjectType) {
             'Application' {
                 $Message = $InvokeCommandMessage -f ("New-AzureADApplicationPasswordCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramPasswordCredential -Compact)" -replace ([regex]::Escape($paramPasswordCredential.Value)),'*****')
-                $Result = Write-HostPrompt 'Add Client Secret to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Secret to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
                 if ($Result -eq 0) {
                     New-AzureADApplicationPasswordCredential -ObjectId $AzureADObject.ObjectId @paramPasswordCredential | Out-Null
                 }
@@ -84,7 +84,7 @@ function Add-AzureAdClientSecret {
             }
             'ServicePrincipal' {
                 $Message = $InvokeCommandMessage -f ("New-AzureADServicePrincipalPasswordCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramPasswordCredential -Compact)" -replace ([regex]::Escape($paramPasswordCredential.Value)),'*****')
-                $Result = Write-HostPrompt 'Add Client Secret to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Secret to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
                 if ($Result -eq 0) {
                     New-AzureADServicePrincipalPasswordCredential -ObjectId $AzureADObject.ObjectId @paramPasswordCredential | Out-Null
                 }

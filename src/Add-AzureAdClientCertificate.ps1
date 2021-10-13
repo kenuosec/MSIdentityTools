@@ -86,7 +86,7 @@ function Add-AzureAdClientCertificate {
         switch ($AzureADObject.ObjectType) {
             'Application' {
                 $Message = $InvokeCommandMessage -f "New-AzureADApplicationKeyCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramKeyCredential -Compact)"
-                $Result = Write-HostPrompt 'Add Client Certificate to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Certificate to Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
                 if ($Result -eq 0) {
                     New-AzureADApplicationKeyCredential -ObjectId $AzureADObject.ObjectId -ErrorAction Stop @paramKeyCredential | Out-Null
                     #Set-AzureADApplication -ObjectId $AzureADObject.ObjectId -PublicClient $false | Out-Null
@@ -98,7 +98,7 @@ function Add-AzureAdClientCertificate {
             }
             'ServicePrincipal' {
                 $Message = $InvokeCommandMessage -f "New-AzureADServicePrincipalKeyCredential -ObjectId $($AzureADObject.ObjectId) $(ConvertTo-PsParameterString $paramKeyCredential -Compact)"
-                $Result = Write-HostPrompt 'Add Client Certificate to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Add Client Certificate to Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
                 if ($Result -eq 0) {
                     New-AzureADServicePrincipalKeyCredential -ObjectId $AzureADObject.ObjectId @paramKeyCredential | Out-Null
                 }

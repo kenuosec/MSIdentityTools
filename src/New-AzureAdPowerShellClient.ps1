@@ -85,7 +85,7 @@ function New-AzureAdPowerShellClient {
 
 `$AzureADApplication | Add-AzureADApplicationOwner -RefObjectId $($CurrentUser.ObjectId)
 "@
-        $Result = Write-HostPrompt 'Create New Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+        $Result = Write-HostPrompt 'Create New Application in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
         if ($Result -eq 0) {
             ## Create Application
             Write-Verbose ('Creating new Azure AD Application [{0}].' -f $paramAzureADApplication.DisplayName)
@@ -110,7 +110,7 @@ function New-AzureAdPowerShellClient {
 
 `$AzureADServicePrincipal | Add-AzureADServicePrincipalOwner -RefObjectId $($CurrentUser.ObjectId)
 "@
-                $Result = Write-HostPrompt 'Create New Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 0
+                $Result = Write-HostPrompt 'Create New Service Principal in Azure AD:' $Message -Choices $ConfirmChoices -DefaultChoice 1
                 if ($Result -eq 0) {
                     ## Create Service Principal
                     Write-Verbose ('Creating new Azure AD Service Principal from Application [{0}].' -f $AzureADApplication.DisplayName)
